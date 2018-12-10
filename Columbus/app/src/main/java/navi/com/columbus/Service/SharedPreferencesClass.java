@@ -12,10 +12,11 @@ public SharedPreferencesClass(SharedPreferences prefs){
     this.prefs = prefs;
 }
 
-public void changeprefs(String save, String string){
+public boolean changeprefs(String save, String string){
     SharedPreferences.Editor editor = prefs.edit();
     editor.putString(save, string);
     editor.apply();
+    return true;
     }
 
     public Map<String, ?> getAllInfo(){

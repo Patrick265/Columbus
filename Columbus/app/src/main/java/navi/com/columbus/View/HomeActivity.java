@@ -21,12 +21,6 @@ public class HomeActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        SharedPreferences prefs = getSharedPreferences("Application", MODE_PRIVATE);
-        SharedPreferencesClass sharedPreferencesClass = new SharedPreferencesClass(prefs);
-        sharedPreferencesClass.changeprefs("like fuck", "ali");
-
-        Map<String, ?> keyValues = sharedPreferencesClass.getAllInfo();
-        Log.i("AAAAAAAAAAAAA", keyValues.toString());
 
         Button button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
