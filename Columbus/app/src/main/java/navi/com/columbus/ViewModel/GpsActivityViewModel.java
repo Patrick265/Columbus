@@ -1,5 +1,6 @@
 package navi.com.columbus.ViewModel;
 
-public class GpsActivityViewModel
-{
+import android.content.SharedPreferences;
+
+public class GpsActivityViewModel {
 }
