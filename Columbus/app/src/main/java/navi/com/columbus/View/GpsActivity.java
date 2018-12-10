@@ -50,7 +50,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
 
-        mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gps_Map));
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
     }
