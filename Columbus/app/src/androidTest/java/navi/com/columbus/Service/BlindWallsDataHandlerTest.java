@@ -5,6 +5,8 @@ import android.support.test.InstrumentationRegistry;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import navi.com.columbus.DataModel.Monument;
 
 import static org.junit.Assert.*;
@@ -15,8 +17,10 @@ public class BlindWallsDataHandlerTest {
     @Test
     public void getWalls() {
         BlindWallsListener listener = new BlindWallsListener() {
+
             @Override
-            public void onMonumentAvailable(Monument monument) {
+            public void onAllMonumentsAvailable(ArrayList<Monument> monuments)
+            {
 
             }
 

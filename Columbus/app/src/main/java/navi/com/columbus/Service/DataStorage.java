@@ -2,12 +2,9 @@ package navi.com.columbus.Service;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
-import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -191,8 +188,41 @@ public class DataStorage extends SQLiteOpenHelper
         return routes;
     }
 
-    public Route getRoute() {
-    return null;
+
+    /**
+     * It will search through the database with the one parameters and will return the route.
+     * If it cannot find a route it will throw a new Error message.
+     * @param routename The name of the route
+     * @return The route
+     */
+    public Route retrieveRoute(String routename) {
+        String query = "SELECT * FROM ROUTE WHERE ROUTE.RouteName = \"" + routename +"\" LIMIT 1;";
+        Log.d("QUERYROUTE", query);
+
+        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
+        if(cursor!= null){
+            cursor.moveToFirst();
+        }
+
+        if(cursor.getCount() > 0) {
+            Route route = new Route.Builder()
+                    .name(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ROUTENAME)))
+                    .description(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_DESCRIPTION)))
+                    .length(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_LENGTH)))
+                    .build();
+            if(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_FINSIHED)) == 1) {
+                route.setFinished(true);
+            } else
+            {
+                route.setFinished(false);
+            }
+            cursor.close();
+            return route;
+        }
+        else {
+            cursor.close();
+            throw new Error("ROUTE COULD NOT BE FOUND BECAUSE EITHER IT DOES NOT EXIST OR INVALID PARAMETERS!");
+        }
     }
 
 }
