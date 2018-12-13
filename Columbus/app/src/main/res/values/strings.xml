@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Columbus</string>
+    <string name="app_name" translatable="false">Columbus</string>
+    <string name="help_title">Help</string>
+    <string name="routeList_title">Route selection</string>
+    <string name="help_info">This application is made to help tourists visit Breda on their own.
+        There are multiple routes to choose from on the route selection screen, which will, after selected, automatically show on the map.</string>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="help_title">Help</string>
+    <string name="help_info">Deze applicatie is gemaakt om touristen te helpen breda alleen te bezoeken.
+        Op het route selecteren scherm kunt u een route uitkiezen, welke dan automatisch op een kaart wordt getoont.</string>
+    <string name="routeList_title">Route lijst</string>
+</resources>
