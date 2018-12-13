@@ -2,6 +2,8 @@ package navi.com.columbus;
 
 import org.junit.Test;
 
+import navi.com.columbus.DataModel.Monument;
+
 import static org.junit.Assert.*;
 
 /**
@@ -16,4 +18,5 @@ public class ExampleUnitTest
     {
         assertEquals(4, 2 + 2);
     }
+
 }
