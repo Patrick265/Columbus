@@ -1,5 +1,7 @@
 package navi.com.columbus.DataModel;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Monument
 {
     private String name;
@@ -9,6 +11,7 @@ public class Monument
     private String imageURL;
     private double longitude;
     private double latitude;
+    private LatLng coordinate;
 
     private int constructionYear;
     private boolean isVisited;
@@ -23,6 +26,7 @@ public class Monument
         this.imageURL = builder.imageURL;
         this.longitude = builder.longitude;
         this.latitude = builder.latitude;
+        this.coordinate = new LatLng(latitude,longitude);
         this.constructionYear = builder.constructionYear;
         this.isVisited = builder.isVisited;
     }
