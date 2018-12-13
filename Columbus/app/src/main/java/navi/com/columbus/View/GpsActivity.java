@@ -184,7 +184,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onRouteAvailable(JSONObject object) {
         try {
             jsonObject = object;
-            List<LatLng> legs = PolyUtil.decode(jsonObject.getJSONArray("routes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
+            List<LatLng> legs = PolyUtil.decode(jsonObject.getJSONArray("retrieveAllRoutes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
 
             lineOptions = new PolylineOptions();
             lineOptions.addAll(legs);
