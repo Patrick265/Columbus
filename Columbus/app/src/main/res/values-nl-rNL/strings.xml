@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="help_title">Help</string>
+    <string name="help_info">Deze applicatie is gemaakt om touristen te helpen breda alleen te bezoeken.
+        Op het route selecteren scherm kunt u een route uitkiezen, welke dan automatisch op een kaart wordt getoont.</string>
+    <string name="routeList_title">Route lijst</string>
+    <string name="histkm_description">Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad. En daarna: hakke takke pinten pakke.</string>
+
+</resources>

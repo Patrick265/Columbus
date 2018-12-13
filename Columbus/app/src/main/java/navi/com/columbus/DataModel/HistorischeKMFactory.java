@@ -1,49 +1,58 @@
 package navi.com.columbus.DataModel;
 
-import android.content.res.AssetManager;
-import android.util.Log;
-
 import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderHeaderAware;
-
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import navi.com.columbus.R;
 
 public class HistorischeKMFactory
 {
-    private Map<String, String> values;
+    private List<Monument> monumentList;
 
     public HistorischeKMFactory()
     {
-        this.values = new HashMap<>();
+        this.monumentList = new ArrayList<>();
+
     }
 
-    public int getHistKmMap()
+    public Route getHistorischeKilometer()
     {
-        if(values == null)
+        if(monumentList.isEmpty())
         {
+            monumentList = getHistKmList();
+        }
+        Route histKmRoute = new Route.Builder().routeList(monumentList).name("De historische kilometer").description("Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad.").build();
+        System.out.println(histKmRoute.toString());
+        return histKmRoute;
+    }
+
+    private List<Monument> getHistKmList()
+    {
+        List<Monument> tempList = new ArrayList<>();
+
             try
             {
-
-
                 CSVReader reader = new CSVReader(new FileReader("D:\\Documenten\\Technische Informatica\\2. Jaar 2\\2. Periode 2\\1. AGS A5\\4. Fase 3 - Implementatie\\Code\\Columbus\\Columbus\\app\\src\\main\\java\\navi\\com\\columbus\\Assets\\HistKm.csv"),';');
                 String[] nextLine;
                 while((nextLine = reader.readNext()) != null)
                 {
-                    System.out.println("HISTKM----"+ nextLine[0]);
-                    System.out.println("HISTKM----"+ nextLine[1]);
-                    System.out.println("HISTKM----"+ nextLine[2]);
-                    System.out.println("HISTKM----"+ nextLine[3]);
+                    Monument monument = new Monument.Builder().longitude(Double.valueOf(nextLine[1]))
+                            .latitude(Double.valueOf(nextLine[2]))
+                            .name(nextLine[3])
+                            .description(nextLine[4])
+                            .build();
+                    tempList.add(monument);
                 }
             } catch (IOException e)
             {
                 e.printStackTrace();
             }
-        }
-        return 1;
+            return tempList;
     }
+
+
 
 }
 
@@ -51,8 +60,8 @@ public class HistorischeKMFactory
 /*
  try
             {
-                values = new CSVReaderHeaderAware(new FileReader("navi/com/columbus/Assets/HistKm.csv")).readMap();
-                Log.i("HistKMvalue", String.valueOf(values.size()));
+                monumentList = new CSVReaderHeaderAware(new FileReader("navi/com/columbus/Assets/HistKm.csv")).readMap();
+                Log.i("HistKMvalue", String.valueOf(monumentList.size()));
             } catch (IOException e)
             {
                 e.printStackTrace();

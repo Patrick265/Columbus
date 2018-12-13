@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Columbus</string>
+    <string name="app_name" translatable="false">Columbus</string>
+    <string name="help_title">Help</string>
+    <string name="routeList_title">Route selection</string>
+    <string name="help_info">This application is made to help tourists visit Breda on their own.
+        There are multiple routes to choose from on the route selection screen, which will, after selected, automatically show on the map.</string>
+    <string name="histkm_description">Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad. En daarna: hakke takke pinten pakke.</string>
 </resources>

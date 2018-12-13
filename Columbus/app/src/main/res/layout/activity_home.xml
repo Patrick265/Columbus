@@ -74,6 +74,7 @@
             android:text="Routes"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +160,7 @@
         app:srcCompat="@drawable/ags" />
 
     <ImageButton
-        android:id="@+id/home_InfoButton"
+        android:id="@+id/home_HelpButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/ic_info_button"
@@ -180,7 +181,7 @@
         android:layout_marginBottom="8dp"
         android:text="Home"
         android:textColor="@color/colorSecundary"
-        android:textSize="18sp"
+        android:textSize="19sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/home_Guideline1"
         app:layout_constraintEnd_toStartOf="@+id/home_Guideline3"
