@@ -12,7 +12,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.Locale;
 import java.util.Random;
 
 import navi.com.columbus.DataModel.Monument;
@@ -29,7 +31,7 @@ public class BlindWallsDataHandler {
     }
 
     // alle murals ophalen
-    public void getWalls(){
+    public boolean getWalls(){
         String url = "https://api.blindwalls.gallery/apiv2/murals";
 
         JsonArrayRequest request = new JsonArrayRequest(
@@ -40,14 +42,27 @@ public class BlindWallsDataHandler {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d("VOLLEY_TAG",response.toString());
+                        String language;
+                        if(Locale.getDefault().getLanguage().equals("nl")){
+                            language = "nl";
+                        }
+                        else{
+                            language = "en";
+                        }
                         for (int i=0; i < response.length(); i++) {
                             try {
-                                String name = response.getJSONObject(i).getString("");
-                                String creator = response.getJSONObject(i).getString("author");
-                                String desc = response.getJSONObject(i).getJSONObject("description").getString("nl");
-                                JSONArray images = response.getJSONObject(i).getJSONArray("images");
+                                JSONObject o = response.getJSONObject(i);
+                                String name = o.getString("author");
+                                String desc = o.getJSONObject("description").getString(language);
+                                String creator = o.getString("author");
+                                //Blind Walls hebben geen sound;
+                                JSONArray images = o.getJSONArray("images");
                                 int index = new Random().nextInt(images.length());
                                 String imageURL = "https://api.blindwalls.gallery/" + images.getJSONObject(index).getString("url");
+
+                                Double longitude = o.getDouble("longitude");
+                                Double latitude = o.getDouble("latitude");
+                                int constructionyear = o.getInt("year");
                                 Monument monument = new Monument.Builder().description(desc).build();
                                 listener.onMonumentAvailable(monument);
                                 Log.d("VOLLEY_TAG", monument.toString());
@@ -66,11 +81,13 @@ public class BlindWallsDataHandler {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("VOLLEY_TAG",error.toString() );
                         listener.onMonumentError("");
+
                     }
                 }
         );
 
         this.queue.add(request);
+        return true;
     }
 
 
