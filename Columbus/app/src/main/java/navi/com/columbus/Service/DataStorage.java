@@ -192,7 +192,7 @@ public class DataStorage extends SQLiteOpenHelper
     }
 
     public Route getRoute() {
-
+    return null;
     }
 
 }

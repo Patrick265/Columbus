@@ -1,8 +1,13 @@
 package navi.com.columbus.DataModel;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import navi.com.columbus.R;
@@ -34,7 +39,11 @@ public class HistorischeKMFactory
 
             try
             {
-                CSVReader reader = new CSVReader(new FileReader("D:\\Documenten\\Technische Informatica\\2. Jaar 2\\2. Periode 2\\1. AGS A5\\4. Fase 3 - Implementatie\\Code\\Columbus\\Columbus\\app\\src\\main\\java\\navi\\com\\columbus\\Assets\\HistKm.csv"),';');
+                final CSVParser parser = new CSVParserBuilder()
+                        .withSeparator(';')
+                        .build();
+                final  CSVReader reader = new CSVReaderBuilder(new StringReader("D:\\Documenten\\Technische Informatica\\2. Jaar 2\\2. Periode 2\\1. AGS A5\\4. Fase 3 - Implementatie\\Code\\Columbus\\Columbus\\app\\src\\main\\java\\navi\\com\\columbus\\Assets\\HistKm.csv")).withCSVParser(parser).build();
+
                 String[] nextLine;
                 while((nextLine = reader.readNext()) != null)
                 {
