@@ -190,7 +190,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onRouteAvailable(JSONObject object) {
         try {
             jsonObject = object;
-            List<LatLng> legs = PolyUtil.decode(jsonObject.getJSONArray("retrieveAllRoutes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
+            List<LatLng> legs = PolyUtil.decode(jsonObject.getJSONArray("routes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
 
             lineOptions = new PolylineOptions();
             lineOptions.addAll(legs);
@@ -213,9 +213,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onAllMonumentsAvailable(ArrayList<Monument> monuments) {
         ApiHandler test = new ApiHandler(this, listener);
         ArrayList<LatLng> path = new ArrayList<>();
+        int i = 0;
         for(Monument monument: monuments)
         {
-            path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
+            if(i < 20)
+            {
+                path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
+            }
+            i++;
         }
 
         test.getDirections(new LatLng(51.594112, 4.779417),
