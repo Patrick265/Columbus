@@ -13,6 +13,6 @@ public class HistorischeKMFactoryTest
     public void getHistKmMap()
     {
 
-        assertEquals(45, 1);
+        assertEquals(45, kmTest.getHistKmMap().size());
     }
 }
