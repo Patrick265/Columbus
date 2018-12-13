@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
@@ -49,6 +50,7 @@ public class BlindWallsDataHandler {
                         else{
                             language = "en";
                         }
+                        ArrayList<Monument> monuments = new ArrayList<>();
                         for (int i=0; i < response.length(); i++) {
                             try {
                                 JSONObject o = response.getJSONObject(i);
@@ -63,8 +65,16 @@ public class BlindWallsDataHandler {
                                 Double longitude = o.getDouble("longitude");
                                 Double latitude = o.getDouble("latitude");
                                 int constructionyear = o.getInt("year");
-                                Monument monument = new Monument.Builder().description(desc).build();
-                                listener.onMonumentAvailable(monument);
+                                Monument monument = new Monument.Builder()
+                                        .name(name)
+                                        .description(desc)
+                                        .creator(creator)
+                                        .imageURL(imageURL)
+                                        .longitude(longitude)
+                                        .latitude(latitude)
+                                        .constructionYear(constructionyear)
+                                        .build();
+                                monuments.add(monument);
                                 Log.d("VOLLEY_TAG", monument.toString());
 
                             } catch (JSONException e) {
@@ -72,6 +82,7 @@ public class BlindWallsDataHandler {
                             }
 
                         }
+                        listener.onAllMonumentsAvailable(monuments);
 
                     }
                 },

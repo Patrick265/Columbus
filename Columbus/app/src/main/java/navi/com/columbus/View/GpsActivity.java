@@ -43,11 +43,14 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import navi.com.columbus.DataModel.Monument;
 import navi.com.columbus.R;
 import navi.com.columbus.Service.ApiHandler;
+import navi.com.columbus.Service.BlindWallsDataHandler;
+import navi.com.columbus.Service.BlindWallsListener;
 import navi.com.columbus.Service.MapsListener;
 
-public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener {
+public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, BlindWallsListener {
 
     private GoogleMap mMap;
     private SupportMapFragment mapView;
@@ -66,14 +69,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         title.setText(R.string.GPS_title);
 
         listener = this;
-        ApiHandler test = new ApiHandler(this, listener);
-        ArrayList<LatLng> path = new ArrayList<>();
-        path.add(new LatLng(51.593278, 4.779388));
-        path.add(new LatLng(51.592500, 4.779695));
-        path.add(new LatLng(51.585843, 4.792213));
-        test.getDirections(new LatLng(51.594112, 4.779417), new LatLng(51.592500, 4.779388), path);
-
         lineOptions = null;
+        BlindWallsDataHandler handler = new BlindWallsDataHandler(this, this);
+        handler.getWalls();
+
         setContentView(R.layout.activity_gps);
 
 
@@ -86,12 +85,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gps_Map));
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
-
-        try {
-            this.onRouteAvailable (new JSONObject("{\"geocoded_waypoints\":[{\"geocoder_status\":\"OK\",\"place_id\":\"ChIJhVDSf4SfxkcRpeJ9mLW2ORI\",\"types\":[\"street_address\"]},{\"geocoder_status\":\"OK\",\"place_id\":\"ChIJ20MtiIOfxkcRCbODmuKJumQ\",\"types\":[\"street_address\"]},{\"geocoder_status\":\"OK\",\"place_id\":\"ChIJj1Bm8YOfxkcRig_s8BGMTgQ\",\"types\":[\"establishment\",\"point_of_interest\"]},{\"geocoder_status\":\"OK\",\"place_id\":\"ChIJj1Bm8YOfxkcRig_s8BGMTgQ\",\"types\":[\"establishment\",\"point_of_interest\"]}],\"routes\":[{\"bounds\":{\"northeast\":{\"lat\":51.5941123,\"lng\":4.7797342},\"southwest\":{\"lat\":51.5924412,\"lng\":4.7793873}},\"copyrights\":\"Map data ©2018 Google\",\"legs\":[{\"distance\":{\"text\":\"92 m\",\"value\":92},\"duration\":{\"text\":\"1 min\",\"value\":69},\"end_address\":\"Willemstraat 1, 4811 AH Breda, Netherlands\",\"end_location\":{\"lat\":51.5932922,\"lng\":4.7795478},\"start_address\":\"Willemstraat 19, 4811 AJ Breda, Netherlands\",\"start_location\":{\"lat\":51.5941123,\"lng\":4.779421399999999},\"steps\":[{\"distance\":{\"text\":\"92 m\",\"value\":92},\"duration\":{\"text\":\"1 min\",\"value\":69},\"end_location\":{\"lat\":51.5932922,\"lng\":4.7795478},\"html_instructions\":\"Head <b>south</b> on <b>Willemstraat</b> toward <b>Academiesingel</b>\",\"polyline\":{\"points\":\"e~{yHknd\\\\vAMn@EJADAHA\"},\"start_location\":{\"lat\":51.5941123,\"lng\":4.779421399999999},\"travel_mode\":\"WALKING\"}],\"traffic_speed_entry\":[],\"via_waypoint\":[]},{\"distance\":{\"text\":\"0.1 km\",\"value\":117},\"duration\":{\"text\":\"1 min\",\"value\":86},\"end_address\":\"Delpratsingel 1, 4811 AM Breda, Netherlands\",\"end_location\":{\"lat\":51.5924412,\"lng\":4.7796313},\"start_address\":\"Willemstraat 1, 4811 AH Breda, Netherlands\",\"start_location\":{\"lat\":51.5932922,\"lng\":4.7795478},\"steps\":[{\"distance\":{\"text\":\"25 m\",\"value\":25},\"duration\":{\"text\":\"1 min\",\"value\":19},\"end_location\":{\"lat\":51.5930657,\"lng\":4.7795611},\"html_instructions\":\"Head <b>south</b> on <b>Willemstraat</b> toward <b>Academiesingel</b>\",\"polyline\":{\"points\":\"ay{yHeod\\\\@?h@A\"},\"start_location\":{\"lat\":51.5932922,\"lng\":4.7795478},\"travel_mode\":\"WALKING\"},{\"distance\":{\"text\":\"10 m\",\"value\":10},\"duration\":{\"text\":\"1 min\",\"value\":8},\"end_location\":{\"lat\":51.5930279,\"lng\":4.779693},\"html_instructions\":\"Turn <b>left</b> onto <b>Academiesingel</b>/<b>Delpratsingel</b>\",\"maneuver\":\"turn-left\",\"polyline\":{\"points\":\"uw{yHgod\\\\FY\"},\"start_location\":{\"lat\":51.5930657,\"lng\":4.7795611},\"travel_mode\":\"WALKING\"},{\"distance\":{\"text\":\"43 m\",\"value\":43},\"duration\":{\"text\":\"1 min\",\"value\":31},\"end_location\":{\"lat\":51.5926419,\"lng\":4.7797342},\"html_instructions\":\"Turn <b>right</b>\",\"maneuver\":\"turn-right\",\"polyline\":{\"points\":\"mw{yHapd\\\\n@?\\\\G\"},\"start_location\":{\"lat\":51.5930279,\"lng\":4.779693},\"travel_mode\":\"WALKING\"},{\"distance\":{\"text\":\"24 m\",\"value\":24},\"duration\":{\"text\":\"1 min\",\"value\":17},\"end_location\":{\"lat\":51.592517,\"lng\":4.7794484},\"html_instructions\":\"Turn <b>right</b>\",\"maneuver\":\"turn-right\",\"polyline\":{\"points\":\"_u{yHipd\\\\Vv@\"},\"start_location\":{\"lat\":51.5926419,\"lng\":4.7797342},\"travel_mode\":\"WALKING\"},{\"distance\":{\"text\":\"15 m\",\"value\":15},\"duration\":{\"text\":\"1 min\",\"value\":11},\"end_location\":{\"lat\":51.5924412,\"lng\":4.7796313},\"html_instructions\":\"Turn <b>left</b><div style=\\\"font-size:0.9em\\\">Destination will be on the left</div>\",\"maneuver\":\"turn-left\",\"polyline\":{\"points\":\"gt{yHqnd\\\\FOFS\"},\"start_location\":{\"lat\":51.592517,\"lng\":4.7794484},\"travel_mode\":\"WALKING\"}],\"traffic_speed_entry\":[],\"via_waypoint\":[]},{\"distance\":{\"text\":\"20 m\",\"value\":20},\"duration\":{\"text\":\"1 min\",\"value\":15},\"end_address\":\"Delpratsingel 1, 4811 AM Breda, Netherlands\",\"end_location\":{\"lat\":51.592501,\"lng\":4.7793873},\"start_address\":\"Delpratsingel 1, 4811 AM Breda, Netherlands\",\"start_location\":{\"lat\":51.5924412,\"lng\":4.7796313},\"steps\":[{\"distance\":{\"text\":\"15 m\",\"value\":15},\"duration\":{\"text\":\"1 min\",\"value\":11},\"end_location\":{\"lat\":51.592517,\"lng\":4.7794484},\"html_instructions\":\"Head <b>northwest</b>\",\"polyline\":{\"points\":\"ws{yHuod\\\\GRGN\"},\"start_location\":{\"lat\":51.5924412,\"lng\":4.7796313},\"travel_mode\":\"WALKING\"},{\"distance\":{\"text\":\"5 m\",\"value\":5},\"duration\":{\"text\":\"1 min\",\"value\":4},\"end_location\":{\"lat\":51.592501,\"lng\":4.7793873},\"html_instructions\":\"Turn <b>left</b>\",\"maneuver\":\"turn-left\",\"polyline\":{\"points\":\"gt{yHqnd\\\\BJ\"},\"start_location\":{\"lat\":51.592517,\"lng\":4.7794484},\"travel_mode\":\"WALKING\"}],\"traffic_speed_entry\":[],\"via_waypoint\":[]}],\"overview_polyline\":{\"points\":\"e~{yHknd\\\\xCWJAh@AFYn@?\\\\GVv@FOFSGRGNBJ\"},\"summary\":\"Willemstraat\",\"warnings\":[\"Walking directions are in beta.    Use caution – This route may be missing sidewalks or pedestrian paths.\"],\"waypoint_order\":[0,1]}],\"status\":\"OK\"}"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -197,7 +190,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onRouteAvailable(JSONObject object) {
         try {
             jsonObject = object;
-            List<LatLng> legs = PolyUtil.decode(jsonObject.getJSONArray("routes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
+            List<LatLng> legs = PolyUtil.decode(jsonObject.getJSONArray("retrieveAllRoutes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
 
             lineOptions = new PolylineOptions();
             lineOptions.addAll(legs);
@@ -213,6 +206,25 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onRouteError(VolleyError error) {
+
+    }
+
+    @Override
+    public void onAllMonumentsAvailable(ArrayList<Monument> monuments) {
+        ApiHandler test = new ApiHandler(this, listener);
+        ArrayList<LatLng> path = new ArrayList<>();
+        for(Monument monument: monuments)
+        {
+            path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
+        }
+
+        test.getDirections(new LatLng(51.594112, 4.779417),
+                new LatLng(monuments.get(monuments.size()-1).getLatitude(),
+                        monuments.get(monuments.size()-1).getLongitude()), path);
+    }
+
+    @Override
+    public void onMonumentError(String err) {
 
     }
 }

@@ -1,5 +1,7 @@
 package navi.com.columbus.DataModel;
 
+import java.util.List;
+
 public class Route
 {
 
@@ -7,6 +9,7 @@ public class Route
     private String description;
     private double length;
     private boolean finished;
+    private List<Monument> monumentList;
 
     public Route(Builder builder)
     {
@@ -14,6 +17,7 @@ public class Route
         this.length = builder.length;
         this.description = builder.description;
         this.finished = builder.finished;
+        this.monumentList = builder.monumentList;
     }
 
     public static class Builder
@@ -21,6 +25,7 @@ public class Route
         private String name;
         private String description;
         private double length;
+        private List<Monument> monumentList;
         private boolean finished;
 
         public Builder name(String name)
@@ -44,6 +49,12 @@ public class Route
         public Builder finished(boolean finished)
         {
             this.finished = finished;
+            return this;
+        }
+
+        public Builder routeList(List<Monument> routeList)
+        {
+            this.monumentList = routeList;
             return this;
         }
 
@@ -93,6 +104,9 @@ public class Route
         this.finished = finished;
     }
 
+    public List<Monument> getMonumentList() {return monumentList;}
+
+    public void setMonumentList(List<Monument> monumentList) {this.monumentList = monumentList;}
     @Override
     public String toString()
     {
@@ -101,6 +115,7 @@ public class Route
                 ", description='" + description + '\'' +
                 ", length=" + length +
                 ", finished=" + finished +
+                ", amount of monuments =" + monumentList.size() +
                 '}';
     }
 }
