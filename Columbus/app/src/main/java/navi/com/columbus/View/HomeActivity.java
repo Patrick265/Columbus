@@ -32,9 +32,8 @@ public class HomeActivity extends AppCompatActivity
             startActivity(intent);
         });
 
-
-        ImageButton infoButton = findViewById(R.id.home_InfoButton);
-        infoButton.setOnClickListener(v ->
+        ImageButton helpButton = findViewById(R.id.home_HelpButton);
+        helpButton.setOnClickListener(v ->
         {
             Intent intent = new Intent(v.getContext(), HelpActivity.class);
             startActivity(intent);

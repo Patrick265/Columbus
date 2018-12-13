@@ -16,7 +16,8 @@ public class HelpActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
-        TextView text = findViewById(R.id.help_Tekst);
-        text.setMovementMethod(new ScrollingMovementMethod());
+        TextView textView = findViewById(R.id.help_Tekst);
+        textView.setMovementMethod(new ScrollingMovementMethod());
+        textView.setText("");
     }
 }
