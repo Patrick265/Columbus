@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -55,10 +56,15 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private JSONObject jsonObject;
     private PolylineOptions lineOptions;
     private MapsListener listener;
+    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        title = findViewById(R.id.gps_Title);
+        title.setText(R.string.GPS_title);
+
         listener = this;
         ApiHandler test = new ApiHandler(this, listener);
         ArrayList<LatLng> path = new ArrayList<>();

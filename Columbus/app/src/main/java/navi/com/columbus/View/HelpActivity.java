@@ -9,15 +9,24 @@ import navi.com.columbus.R;
 
 public class HelpActivity extends AppCompatActivity
 {
+    private TextView helpTitle;
+    private TextView info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_help);
 
-        TextView text = findViewById(R.id.help_Tekst);
-        text.setText(R.string.help_info);
-        text.setMovementMethod(new ScrollingMovementMethod());
+        helpTitle = findViewById(R.id.help_Title);
+        helpTitle.setText(R.string.help_title);
+
+        info = findViewById(R.id.help_Tekst);
+        info.setText(R.string.help_info);
+        info.setMovementMethod(new ScrollingMovementMethod());
+
+
+
     }
 }

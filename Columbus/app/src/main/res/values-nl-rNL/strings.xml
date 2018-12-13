@@ -3,5 +3,8 @@
     <string name="help_title">Help</string>
     <string name="help_info">Deze applicatie is gemaakt om touristen te helpen breda alleen te bezoeken.
         Op het route selecteren scherm kunt u een route uitkiezen, welke dan automatisch op een kaart wordt getoont.</string>
-    <string name="routeList_title">Route lijst</string>
+    <string name="routeList_title">Route selectie</string>
+    <string name="home_title">Start</string>
+    <string name="home_routeButton">Route selectie</string>
+    <string name="home_possibleBy">Mede mogelijk gemaakt door</string>
 </resources>

@@ -4,4 +4,9 @@
     <string name="routeList_title">Route selection</string>
     <string name="help_info">This application is made to help tourists visit Breda on their own.
         There are multiple routes to choose from on the route selection screen, which will, after selected, automatically show on the map.</string>
+    <string name="home_title">Home</string>
+    <string name="home_routeButton">Route selection</string>
+    <string name="GPS_title" translatable="false">GPS</string>
+    <string name="home_possibleBy">Made possible by</string>
+
 </resources>
