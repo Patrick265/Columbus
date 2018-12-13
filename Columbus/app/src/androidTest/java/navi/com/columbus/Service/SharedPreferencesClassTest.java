@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import java.util.Map;
 
+import navi.com.columbus.DataModel.Monument;
+
 import static org.junit.Assert.*;
 
 public class SharedPreferencesClassTest {
