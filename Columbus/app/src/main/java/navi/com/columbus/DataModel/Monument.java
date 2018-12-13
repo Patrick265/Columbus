@@ -7,8 +7,8 @@ public class Monument
     private String creator;
     private String soundURL;
     private String imageURL;
-    private String longitude;
-    private String latitude;
+    private double longitude;
+    private double latitude;
 
     private int constructionYear;
     private boolean isVisited;
@@ -33,8 +33,8 @@ public class Monument
         private String creator;
         private String soundURL;
         private String imageURL;
-        private String longitude;
-        private String latitude;
+        private double longitude;
+        private double latitude;
         private int constructionYear;
         private boolean isVisited;
 
@@ -68,13 +68,13 @@ public class Monument
             return this;
         }
 
-        public Builder longitude(String longitude)
+        public Builder longitude(double longitude)
         {
             this.longitude = longitude;
             return this;
         }
 
-        public Builder latitude(String latitude)
+        public Builder latitude(double latitude)
         {
             this.latitude = latitude;
             return this;
@@ -123,14 +123,20 @@ public class Monument
         this.imageURL = imageURL;
     }
 
-    public void setLongitude(String longitude)
+    public void setLongitude(double longitude)
     {
-        this.longitude = longitude;
+        if(longitude <180.0 && longitude >-180.0)
+        {
+            this.longitude = longitude;
+        }
     }
 
-    public void setLatitude(String latitude)
+    public void setLatitude(double latitude)
     {
-        this.latitude = latitude;
+        if(latitude < 90.0 && latitude > -90.0)
+        {
+            this.latitude = latitude;
+        }
     }
 
     public void setConstructionYear(int constructionYear)
@@ -168,12 +174,12 @@ public class Monument
         return imageURL;
     }
 
-    public String getLongitude()
+    public double getLongitude()
     {
         return longitude;
     }
 
-    public String getLatitude()
+    public double getLatitude()
     {
         return latitude;
     }
