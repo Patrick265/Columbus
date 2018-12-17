@@ -23,10 +23,7 @@ public class HelpActivity extends AppCompatActivity
         helpTitle.setText(R.string.help_title);
 
         info = findViewById(R.id.help_Tekst);
-        info.setText(R.string.help_info);
         info.setMovementMethod(new ScrollingMovementMethod());
-
-
-
+        info.setText(R.string.help_info);
     }
 }

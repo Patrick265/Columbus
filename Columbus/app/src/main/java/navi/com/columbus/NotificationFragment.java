@@ -1,4 +1,4 @@
-package navi.com.columbus.View;
+package navi.com.columbus;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import navi.com.columbus.R;
 
 public class NotificationFragment extends DialogFragment
 {

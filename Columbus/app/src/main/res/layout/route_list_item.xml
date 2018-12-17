@@ -3,34 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="70dp">
+    android:layout_height="80dp">
 
     <ImageView
         android:id="@+id/rli_Background"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/rli_TextDivider2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="-"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/rli_Description"
-        app:layout_constraintEnd_toStartOf="@+id/rli_Guideline2"
-        app:layout_constraintTop_toTopOf="@+id/rli_Description" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/rli_Guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
 
     <ImageView
         android:id="@+id/rli_ItemDivider"
@@ -46,36 +28,16 @@
         android:id="@+id/rli_Description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
         android:layout_marginBottom="8dp"
         android:text="Beschrijving"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/rli_TextDivider2"
-        app:layout_constraintStart_toEndOf="@+id/rli_TextDivider1"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/rli_Guideline1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
-
-    <TextView
-        android:id="@+id/rli_TextDivider1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/rli_RouteName"
-        app:layout_constraintStart_toStartOf="@+id/rli_Guideline1"
-        app:layout_constraintTop_toTopOf="@+id/rli_RouteName" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rli_RouteName" />
 
     <TextView
         android:id="@+id/rli_RouteName"
@@ -83,15 +45,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Route naam"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/rli_Guideline1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -99,18 +57,14 @@
         android:id="@+id/rli_RouteLength"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Route lengte"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="17sp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/rli_Guideline2"
         app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

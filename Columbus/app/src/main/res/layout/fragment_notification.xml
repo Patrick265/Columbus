@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="320dp"
-    android:layout_height="180dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/colorGray"
     android:orientation="vertical"
     android:padding="5dp">
 
     <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="380dp"
+        android:layout_height="700dp"
         app:cardBackgroundColor="@color/colorGray"
         tools:context=".View.NotificationFragment">
 
@@ -22,7 +23,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/fn_TopBar"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:src="@color/colorPrimaryDark"
@@ -31,43 +32,121 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/fn_Background"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="4dp"
                 android:background="#eeeeee"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintTop_toBottomOf="@+id/fn_TopBar" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/fn_Background"
+                app:layout_constraintStart_toStartOf="@+id/fn_Background"
+                app:layout_constraintTop_toTopOf="@+id/fn_Background">
+
+                <TextView
+                    android:id="@+id/fn_Makers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Makers"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorSecundary"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/fn_ConstructionYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Construction year"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorSecundary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/fn_Image"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:background="@color/colorGray"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="@+id/fn_Background"
+                app:layout_constraintHorizontal_bias="0.512"
+                app:layout_constraintStart_toStartOf="@+id/fn_Background"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
             <TextView
+                android:id="@+id/fn_DescriptionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Title"
+                android:text="Description"
                 android:textColor="@color/colorSecundary"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/fn_Background"
+                app:layout_constraintTop_toBottomOf="@+id/fn_Image" />
+
+            <TextView
+                android:id="@+id/fn_MonumentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Monument name"
+                android:textColor="@color/colorSecundary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/fn_TopBar"
+                app:layout_constraintEnd_toEndOf="@+id/fn_Background"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/fn_Description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:scrollbars="vertical"
+                android:text="Description"
+                android:textColor="@color/colorSecundary"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@+id/fn_OkButton"
+                app:layout_constraintEnd_toEndOf="@+id/fn_Background"
+                app:layout_constraintStart_toStartOf="@+id/fn_Background"
+                app:layout_constraintTop_toBottomOf="@+id/fn_DescriptionTitle" />
+
+            <Button
+                android:id="@+id/fn_OkButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Message"
-                android:textColor="@color/colorSecundary"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                app:layout_constraintEnd_toEndOf="@+id/imageView3"
-                app:layout_constraintStart_toStartOf="@+id/imageView3"
-                app:layout_constraintTop_toTopOf="@+id/imageView3" />
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:text="Ok"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/fn_Background"
+                app:layout_constraintEnd_toEndOf="@+id/fn_Background" />
 
         </android.support.constraint.ConstraintLayout>
 
