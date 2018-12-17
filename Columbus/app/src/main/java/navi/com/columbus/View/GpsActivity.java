@@ -1,22 +1,15 @@
 package navi.com.columbus.View;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
-import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,13 +35,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import navi.com.columbus.DataModel.HistorischeKMFactory;
 import navi.com.columbus.DataModel.Monument;
 import navi.com.columbus.DataModel.Route;
 import navi.com.columbus.R;
 import navi.com.columbus.Service.ApiHandler;
-import navi.com.columbus.Service.BlindWallsDataHandler;
-import navi.com.columbus.Service.BlindWallsListener;
 import navi.com.columbus.Service.LocationCallBackListener;
 import navi.com.columbus.Service.LocationCallbackHandler;
 import navi.com.columbus.Service.MapsListener;
@@ -275,7 +265,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                         for (Monument monument: route.getMonumentList()) {
                             if (i < 24) {
                                 LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
+                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.location))).setZIndex(monument.getId());
                                 if(i < 23) {
                                     path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
                                 }
@@ -301,7 +291,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onLocationAvailable(Location location)
     {
           this.lastLocation = location;
-          Toast.makeText(getApplicationContext(), "je locatie is geupdate", Toast.LENGTH_LONG).show();
+          Toast.makeText(getApplicationContext(), "Je locatie is geupdate!", Toast.LENGTH_LONG).show();
     }
 
 
@@ -313,7 +303,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         Monument clickedMonument = null;
         for (Monument monument : monuments)
         {
-            if (monument.getName().contains(marker.getTitle()))
+            if (monument.getId() == marker.getZIndex())
             {
                 clickedMonument = monument;
                 break;
@@ -326,7 +316,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             args.putString("monumentName", clickedMonument.getName());
             args.putString("makers", clickedMonument.getCreator());
             args.putString("constructionYear", String.valueOf(clickedMonument.getConstructionYear()));
-            args.putString("imageURL", "https://memegenerator.net/img/instances/28117568/kella-niffo-je-ma-is-milf-maaaahng.jpg");
+            args.putString("imageURL", "https://i.pinimg.com/originals/a1/c8/08/a1c808cc33467639d3af6304acfd1148.jpg");
             args.putString("description", clickedMonument.getDescription());
             dialog.setArguments(args);
 
