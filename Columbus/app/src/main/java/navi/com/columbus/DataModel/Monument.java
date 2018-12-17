@@ -14,7 +14,6 @@ public class Monument implements Serializable
     private String imageURL;
     private double longitude;
     private double latitude;
-    private LatLng coordinate;
 
     private int constructionYear;
     private boolean isVisited;
@@ -29,7 +28,6 @@ public class Monument implements Serializable
         this.imageURL = builder.imageURL;
         this.longitude = builder.longitude;
         this.latitude = builder.latitude;
-        this.coordinate = new LatLng(latitude,longitude);
         this.constructionYear = builder.constructionYear;
         this.isVisited = builder.isVisited;
     }

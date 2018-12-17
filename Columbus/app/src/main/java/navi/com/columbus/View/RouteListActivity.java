@@ -14,14 +14,26 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import navi.com.columbus.Adapter.RecyclerViewAdapter;
+import navi.com.columbus.DataModel.HistorischeKMFactory;
+import navi.com.columbus.DataModel.Monument;
 import navi.com.columbus.DataModel.Route;
 import navi.com.columbus.R;
+import navi.com.columbus.Service.ApiHandler;
+import navi.com.columbus.Service.BlindWallsDataHandler;
+import navi.com.columbus.Service.BlindWallsListener;
 import navi.com.columbus.Service.RecyclerItemClickListener;
 
-public class RouteListActivity extends AppCompatActivity
+public class RouteListActivity extends AppCompatActivity implements BlindWallsListener
 {
     private ArrayList<Route> routes;
 
@@ -49,14 +61,14 @@ public class RouteListActivity extends AppCompatActivity
         routesTitle.setText(R.string.routeList_title);
 
         routes = new ArrayList<>();
+        HistorischeKMFactory historischeKMFactory = new HistorischeKMFactory();
+        ArrayList<Monument> blindWallMonuments = new ArrayList<>();
 
-        Route route = new Route.Builder()
-                .name("yeut")
-                .description("yeuter meteut")
-                .length(10.52)
-                .build();
-        routes.add(route);
 
+        routes.add(historischeKMFactory.getHistorischeKilometer());
+        BlindWallsListener listener = this;
+        BlindWallsDataHandler handler = new BlindWallsDataHandler(this, listener);
+        handler.getWalls();
 
         mRecyclerView = findViewById(R.id.rl_RecyclerView);
         //mRecyclerView.setHasFixedSize(true);
@@ -64,9 +76,9 @@ public class RouteListActivity extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerViewAdapter(routes, r -> {
+        mAdapter = new RecyclerViewAdapter(routes, route1 -> {
             Intent intent = new Intent(getApplicationContext(), GpsActivity.class);
-            intent.putExtra("ROUTE", r);
+            intent.putExtra("ROUTE", route1);
 
             startActivity(intent);
         });
@@ -79,12 +91,6 @@ public class RouteListActivity extends AppCompatActivity
             Intent intent = new Intent(v.getContext(), HelpActivity.class);
             startActivity(intent);
         });
-
-        routes.add(
-                new Route.Builder().description("Gerdtinus is autisch")
-                        .name("TESTTTT")
-                        .build()
-        );
     }
 
     private void showMessage(String title, String message)
@@ -107,5 +113,33 @@ public class RouteListActivity extends AppCompatActivity
         } catch(Exception e){
             Log.d("ERROR", e.toString());
         }
+    }
+
+    @Override
+    public void onAllMonumentsAvailable(ArrayList<Monument> monuments)
+    {
+        ArrayList<Monument> monumentsBlindwall = new ArrayList<>();
+        int i = 0;
+        for (Monument monument: monuments)
+        {
+            if (i < 23)
+            {
+                monumentsBlindwall.add(monument);
+            }
+            i++;
+        }
+
+        routes.add(
+                new Route.Builder().description("BlindWalls")
+                        .name("De route van Blind walls")
+                        .routeList(monumentsBlindwall)
+                        .build()
+        );
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onMonumentError(String err) {
+
     }
 }

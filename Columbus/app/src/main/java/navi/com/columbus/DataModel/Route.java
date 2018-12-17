@@ -1,6 +1,7 @@
 package navi.com.columbus.DataModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Route implements Serializable
@@ -10,7 +11,7 @@ public class Route implements Serializable
     private String description;
     private double length;
     private boolean finished;
-    private List<Monument> monumentList;
+    private ArrayList<Monument> monumentList;
 
     public Route(Builder builder)
     {
@@ -26,7 +27,7 @@ public class Route implements Serializable
         private String name;
         private String description;
         private double length;
-        private List<Monument> monumentList;
+        private ArrayList<Monument> monumentList;
         private boolean finished;
 
         public Builder name(String name)
@@ -53,7 +54,7 @@ public class Route implements Serializable
             return this;
         }
 
-        public Builder routeList(List<Monument> routeList)
+        public Builder routeList(ArrayList<Monument> routeList)
         {
             this.monumentList = routeList;
             return this;
@@ -105,9 +106,9 @@ public class Route implements Serializable
         this.finished = finished;
     }
 
-    public List<Monument> getMonumentList() {return monumentList;}
+    public ArrayList<Monument> getMonumentList() {return monumentList;}
 
-    public void setMonumentList(List<Monument> monumentList) {this.monumentList = monumentList;}
+    public void setMonumentList(ArrayList<Monument> monumentList) {this.monumentList = monumentList;}
     @Override
     public String toString()
     {

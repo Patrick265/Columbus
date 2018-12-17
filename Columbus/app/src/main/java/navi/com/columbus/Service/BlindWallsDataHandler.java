@@ -80,7 +80,6 @@ public class BlindWallsDataHandler {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                         }
                         listener.onAllMonumentsAvailable(monuments);
 

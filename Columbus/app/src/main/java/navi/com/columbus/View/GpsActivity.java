@@ -7,11 +7,13 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,7 +37,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import navi.com.columbus.DataModel.HistorischeKMFactory;
 import navi.com.columbus.DataModel.Monument;
+import navi.com.columbus.DataModel.Route;
 import navi.com.columbus.R;
 import navi.com.columbus.Service.ApiHandler;
 import navi.com.columbus.Service.BlindWallsDataHandler;
@@ -45,7 +49,7 @@ import navi.com.columbus.Service.LocationCallbackHandler;
 import navi.com.columbus.Service.MapsListener;
 import navi.com.columbus.Service.NotificationService;
 
-public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, BlindWallsListener, LocationCallBackListener, OnMarkerClickListener
+public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, LocationCallBackListener, OnMarkerClickListener
 {
     private GoogleMap mMap;
     private SupportMapFragment mapView;
@@ -53,14 +57,15 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private PolylineOptions lineOptions;
     private MapsListener listener;
     private Location lastLocation;
+    GpsActivity gpsActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-
         lastLocation = null;
+        gpsActivity = this;
 
         LocationCallbackHandler loc = new LocationCallbackHandler();
         loc.addListener(this);
@@ -69,10 +74,16 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
         listener = this;
         lineOptions = null;
-        BlindWallsDataHandler handler = new BlindWallsDataHandler(this, this);
-        handler.getWalls();
 
-
+        Route route = (Route)getIntent().getExtras().get("ROUTE");
+        if(route.getName().equals("De route van Blind walls"))
+        {
+            callAPI(route);
+        }
+        else if(route.getName().equals("De historische kilometer"))
+        {
+            callAPI(route);
+        }
 
         Bundle mapViewBundle = null;
         if (savedInstanceState != null)
@@ -236,22 +247,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    @Override
-    public void onAllMonumentsAvailable(ArrayList<Monument> monuments)
+    public void callAPI(Route route)
     {
         ApiHandler test = new ApiHandler(this, listener);
         ArrayList<LatLng> path = new ArrayList<>();
-        int i = 0;
-        for (Monument monument: monuments)
-        {
-            if (i < 23)
-            {
-                LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
-                path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
-            }
-            i++;
-        }
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask()
@@ -259,19 +258,35 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void run()
             {
-                if (lastLocation != null)
+                if (lastLocation != null && mMap != null)
                 {
-                    test.getDirections(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
-                            new LatLng(monuments.get(monuments.size() - 1).getLatitude(),
-                                    monuments.get(monuments.size() - 1).getLongitude()), path);
                     timer.cancel();
+                    gpsActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            int i = 0;
+                            for (Monument monument: route.getMonumentList()) {
+                                if (i < 24) {
+                                    LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
+                                    mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
+                                    if(i < 23) {
+                                        path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
+                                    }
+                                }
+                                i++;
+                            }
+
+                            test.getDirections(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
+                                    new LatLng(route.getMonumentList().get(route.getMonumentList().size() - 1).getLatitude(),
+                                            route.getMonumentList().get(route.getMonumentList().size() - 1).getLongitude()), path);
+                        }
+                    });
                 }
             }
-        }, 0, 1000);
+        },0, 1000);
     }
 
-    @Override
-    public void onMonumentError(String err)
+    void fakeCallBack()
     {
 
     }
@@ -280,6 +295,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onLocationAvailable(Location location)
     {
           this.lastLocation = location;
+        Toast.makeText(getApplicationContext(), "je locatie is geupdate", Toast.LENGTH_LONG);
     }
 
 
