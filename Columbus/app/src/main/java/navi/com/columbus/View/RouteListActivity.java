@@ -59,7 +59,7 @@ public class RouteListActivity extends AppCompatActivity
 
 
         mRecyclerView = findViewById(R.id.rl_RecyclerView);
-        mRecyclerView.setHasFixedSize(true);
+        //mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -71,23 +71,6 @@ public class RouteListActivity extends AppCompatActivity
             startActivity(intent);
         });
         mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(mRecyclerView.getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener()
-                {
-                    @Override
-                    public void onItemClick(View view, int position)
-                    {
-
-                    }
-
-                    @Override
-                    public void onLongItemClick(View view, int position)
-                    {
-
-                    }
-                })
-        );
 
         ImageButton helpButton = findViewById(R.id.rl_HelpButton);
 
