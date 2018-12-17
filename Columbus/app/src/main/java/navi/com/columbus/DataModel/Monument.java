@@ -2,9 +2,10 @@ package navi.com.columbus.DataModel;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Monument
+public class Monument implements Serializable
 {
     private String name;
     private String description;

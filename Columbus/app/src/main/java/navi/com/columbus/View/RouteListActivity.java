@@ -64,7 +64,12 @@ public class RouteListActivity extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerViewAdapter(routes);
+        mAdapter = new RecyclerViewAdapter(routes, r -> {
+            Intent intent = new Intent(getApplicationContext(), GpsActivity.class);
+            intent.putExtra("ROUTE", r);
+
+            startActivity(intent);
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnItemTouchListener(

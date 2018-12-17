@@ -1,8 +1,9 @@
 package navi.com.columbus.DataModel;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Route
+public class Route implements Serializable
 {
 
     private String name;
