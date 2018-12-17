@@ -64,15 +64,3 @@ public class HistorischeKMFactory
 
 
 }
-
-
-/*
- try
-            {
-                monumentList = new CSVReaderHeaderAware(new FileReader("navi/com/columbus/Assets/HistKm.csv")).readMap();
-                Log.i("HistKMvalue", String.valueOf(monumentList.size()));
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
- */

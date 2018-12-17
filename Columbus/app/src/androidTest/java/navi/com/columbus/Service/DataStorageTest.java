@@ -1,8 +1,12 @@
 package navi.com.columbus.Service;
 
 import android.support.test.InstrumentationRegistry;
+import android.util.Log;
 
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import navi.com.columbus.DataModel.Monument;
 import navi.com.columbus.DataModel.Route;
@@ -24,12 +28,21 @@ public class DataStorageTest
             .longitude(219312)
             .build();
 
+    private List<Monument> monuments = new ArrayList<>();
+
+
+    public void initalise() {
+        monuments.add(monument);
+    }
+
     private Route route = new Route.Builder()
                     .name("Historische kilometer")
                     .length(5)
                     .description("Historische kilometer")
                     .finished(true)
+                    .routeList(monuments)
                     .build();
+
 
     @Test
     public void onUpgrade()
@@ -75,6 +88,7 @@ public class DataStorageTest
     @Test
     public void addRoute()
     {
+        initalise();
         this.storage.addRoute(route);
     }
 
@@ -92,5 +106,21 @@ public class DataStorageTest
         assertEquals(route.getDescription(), r.getDescription());
         assertEquals(route.getLength(), r.getLength(), 0.005);
 
+    }
+
+    @Test
+    public void getRPrimaryKey()
+    {
+        int i = storage.getRPrimaryKey(route);
+
+        assertEquals(1, i);
+    }
+
+    @Test
+    public void getMPrimaryKey()
+    {
+        int i = storage.getMPrimaryKey(monument);
+
+        assertEquals(1, i);
     }
 }
