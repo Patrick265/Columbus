@@ -75,11 +75,11 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Route route = (Route)getIntent().getExtras().get("ROUTE");
         monuments = route.getMonumentList();
-        if(route.getName().equals("De route van Blind walls"))
+        if(route.getName().equals(getResources().getString(R.string.bw_shortdescription)))
         {
             callAPI(route);
         }
-        else if(route.getName().equals("De historische kilometer"))
+        else if(route.getName().equals(getResources().getString(R.string.histkm_shortdescription)))
         {
             callAPI(route);
         }
@@ -316,7 +316,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
               Bundle args = new Bundle();
               args.putString("monumentName", closestMonument.getName());
               args.putString("makers", closestMonument.getCreator());
-              args.putString("constructionYear", String.valueOf(closestMonument.getConstructionYear()));
+              args.putString("constructionYear", Integer.toString(closestMonument.getConstructionYear()));
               args.putString("imageURL", "https://memegenerator.net/img/instances/28117568/kella-niffo-je-ma-is-milf-maaaahng.jpg");
               args.putString("description", closestMonument.getDescription());
               args.putInt("id", closestMonument.getId());

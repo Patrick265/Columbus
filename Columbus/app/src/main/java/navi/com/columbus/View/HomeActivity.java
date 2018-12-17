@@ -89,7 +89,8 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    private void checkLocationPermission() {
+    private void checkLocationPermission()
+    {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -102,9 +103,9 @@ public class HomeActivity extends AppCompatActivity
                 // sees the explanation, try again to request the permission.
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AppTheme);
                 dialogBuilder
-                        .setTitle("Location Permission Needed")
-                        .setMessage("This app needs the Location permission, please accept to use location functionality")
-                        .setPositiveButton("OK", (dialogInterface, i) -> {
+                        .setTitle(R.string.permission_title)
+                        .setMessage(R.string.permission_message)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
                             //Prompt the user once explanation has been shown
                             ActivityCompat.requestPermissions(HomeActivity.this,
                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -124,30 +125,34 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case MY_PERMISSIONS_REQUEST_LOCATION:
+                {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
 
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                    {
+
                     }
 
-                } else {
+                }
+                else
+                {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show();
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AppTheme);
                     dialogBuilder
-                            .setTitle("Location Permission Needed")
-                            .setMessage("This app needs the Location permission, please accept to use location functionality")
-                            .setPositiveButton("OK", (dialogInterface, i) -> {
+                            .setTitle(R.string.permission_title)
+                            .setMessage(R.string.permission_message)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
                                 //Prompt the user once explanation has been shown
                                 ActivityCompat.requestPermissions(HomeActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},

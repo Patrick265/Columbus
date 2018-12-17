@@ -65,7 +65,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
         ArrayList<Monument> blindWallMonuments = new ArrayList<>();
 
 
-        routes.add(historischeKMFactory.getHistorischeKilometer());
+        routes.add(historischeKMFactory.getHistorischeKilometer(this));
         BlindWallsListener listener = this;
         BlindWallsDataHandler handler = new BlindWallsDataHandler(this, listener);
         handler.getWalls();
@@ -130,8 +130,8 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
         }
 
         routes.add(
-                new Route.Builder().description("BlindWalls")
-                        .name(String.valueOf(R.string.bw_shortdescription))
+                new Route.Builder().description(getResources().getString(R.string.bw_description))
+                        .name(getResources().getString(R.string.bw_shortdescription))
                         .routeList(monumentsBlindwall)
                         .build()
         );

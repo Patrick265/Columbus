@@ -8,6 +8,11 @@
     <string name="home_routeButton">Route selection</string>
     <string name="GPS_title" translatable="false">GPS</string>
     <string name="home_possibleBy">Made possible by</string>
-
-    <string name="histkm_description">Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad. En daarna: hakke takke pinten pakke.</string>
+    <string name="histkm_description">A walking route along the history of Breda. A short walk through the center that will introduce you to the profound culture and history of this beautiful city.</string>
+    <string name="histkm_shortdescription">The historic kilometer</string>
+    <string name="bw_shortdescription">The route of the Blind Walls</string>
+    <string name="bw_description">The route of the Blind Walls</string>
+    <string name="permission_title">Location permission needed</string>
+    <string name="permission_message">This app needs the Location permission, please accept to use location functionality.</string>
+    <string name="permission_denied">Permission denied</string>
 </resources>

@@ -7,5 +7,11 @@
     <string name="home_title">Start</string>
     <string name="home_routeButton">Route selectie</string>
     <string name="home_possibleBy">Mede mogelijk gemaakt door</string>
-    <string name="histkm_description">Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad. En daarna: hakke takke pinten pakke.</string>
+    <string name="histkm_description">Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad.</string>
+    <string name="histkm_shortdescription">De historische kilometer</string>
+    <string name="bw_shortdescription">De route van Blind Walls</string>
+    <string name="bw_description">De route van Blind Walls</string>
+    <string name="permission_title">Locatietoestemming nodig</string>
+    <string name="permission_message">Deze app heeft locatietoestemming nodig, geef aub toegang tot de locatie functionaliteit.</string>
+    <string name="permission_denied">Geen toestemming</string>
 </resources>

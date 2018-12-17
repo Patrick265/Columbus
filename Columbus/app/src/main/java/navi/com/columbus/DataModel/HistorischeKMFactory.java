@@ -1,5 +1,7 @@
 package navi.com.columbus.DataModel;
 
+import android.content.Context;
+
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -22,13 +24,13 @@ public class HistorischeKMFactory
 
     }
 
-    public Route getHistorischeKilometer()
+    public Route getHistorischeKilometer(Context context)
     {
         if(monumentList.isEmpty())
         {
             monumentList = getHistKmList();
         }
-        Route histKmRoute = new Route.Builder().routeList(monumentList).name("De historische kilometer").description("Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad.").build();
+        Route histKmRoute = new Route.Builder().routeList(monumentList).name(context.getResources().getString(R.string.histkm_shortdescription)).description(context.getResources().getString(R.string.histkm_description)).build();
         System.out.println(histKmRoute.toString());
         return histKmRoute;
     }
@@ -116,7 +118,4 @@ public class HistorischeKMFactory
             }
             return sightseeingslist;
     }
-
-
-
 }

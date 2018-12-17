@@ -39,51 +39,49 @@ public class BlindWallsDataHandler {
                 Request.Method.GET,
                 url,
                 null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("VOLLEY_TAG",response.toString());
-                        String language;
-                        if(Locale.getDefault().getLanguage().equals("nl")){
-                            language = "nl";
-                        }
-                        else{
-                            language = "en";
-                        }
-                        ArrayList<Monument> monuments = new ArrayList<>();
-                        for (int i=0; i < response.length(); i++) {
-                            try {
-                                JSONObject o = response.getJSONObject(i);
-                                String name = o.getString("author");
-                                String desc = o.getJSONObject("description").getString(language);
-                                String creator = o.getString("author");
-                                //Blind Walls hebben geen sound;
-                                JSONArray images = o.getJSONArray("images");
-                                int index = new Random().nextInt(images.length());
-                                String imageURL = "https://api.blindwalls.gallery/" + images.getJSONObject(index).getString("url");
-
-                                Double longitude = o.getDouble("longitude");
-                                Double latitude = o.getDouble("latitude");
-                                int constructionyear = o.getInt("year");
-                                Monument monument = new Monument.Builder()
-                                        .name(name)
-                                        .description(desc)
-                                        .creator(creator)
-                                        .imageURL(imageURL)
-                                        .longitude(longitude)
-                                        .latitude(latitude)
-                                        .constructionYear(constructionyear)
-                                        .build();
-                                monuments.add(monument);
-                                Log.d("VOLLEY_TAG", monument.toString());
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        listener.onAllMonumentsAvailable(monuments);
-
+                response ->
+                {
+                    Log.d("VOLLEY_TAG",response.toString());
+                    String language;
+                    if(Locale.getDefault().getLanguage().equals("nl")){
+                        language = "nl";
                     }
+                    else{
+                        language = "en";
+                    }
+                    ArrayList<Monument> monuments = new ArrayList<>();
+                    for (int i=0; i < response.length(); i++) {
+                        try {
+                            JSONObject o = response.getJSONObject(i);
+                            String name = o.getString("author");
+                            String desc = o.getJSONObject("description").getString(language);
+                            String creator = o.getString("author");
+                            //Blind Walls hebben geen sound;
+                            JSONArray images = o.getJSONArray("images");
+                            int index = new Random().nextInt(images.length());
+                            String imageURL = "https://api.blindwalls.gallery/" + images.getJSONObject(index).getString("url");
+
+                            Double longitude = o.getDouble("longitude");
+                            Double latitude = o.getDouble("latitude");
+                            int constructionyear = o.getInt("year");
+                            Monument monument = new Monument.Builder()
+                                    .name(name)
+                                    .description(desc)
+                                    .creator(creator)
+                                    .imageURL(imageURL)
+                                    .longitude(longitude)
+                                    .latitude(latitude)
+                                    .constructionYear(constructionyear)
+                                    .build();
+                            monuments.add(monument);
+                            Log.d("VOLLEY_TAG", monument.toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    listener.onAllMonumentsAvailable(monuments);
+
                 },
 
                 new Response.ErrorListener(){
