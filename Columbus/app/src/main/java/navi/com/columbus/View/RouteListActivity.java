@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import navi.com.columbus.DataModel.Route;
 import navi.com.columbus.R;
-import navi.com.columbus.ViewModel.RecyclerViewAdapter;
+import navi.com.columbus.Adapter.RecyclerViewAdapter;
 
 public class RouteListActivity extends AppCompatActivity
 {
