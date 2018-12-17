@@ -2,12 +2,14 @@ package navi.com.columbus.View;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.AppComponentFactory;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,11 +51,14 @@ import navi.com.columbus.R;
 import navi.com.columbus.Service.ApiHandler;
 import navi.com.columbus.Service.BlindWallsDataHandler;
 import navi.com.columbus.Service.BlindWallsListener;
+import navi.com.columbus.Service.LocationCallbackHandler;
 import navi.com.columbus.Service.MapsListener;
+import navi.com.columbus.Service.NotificationService;
 
 public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, BlindWallsListener {
 
     private GoogleMap mMap;
+    private LocationCallbackHandler loc;
     private SupportMapFragment mapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
     private Location mLastLocation;
@@ -60,11 +66,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private PolylineOptions lineOptions;
     private MapsListener listener;
     private TextView title;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_gps);
 
+        loc = new LocationCallbackHandler();
         title = findViewById(R.id.gps_Title);
         title.setText(R.string.GPS_title);
 
@@ -73,7 +82,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         BlindWallsDataHandler handler = new BlindWallsDataHandler(this, this);
         handler.getWalls();
 
-        setContentView(R.layout.activity_gps);
 
 
         Bundle mapViewBundle = null;
@@ -85,6 +93,21 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gps_Map));
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
+
+        button = findViewById(R.id.GPSStartRouteButton);
+        button.setEnabled(false);
+        Context context = getApplicationContext();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(new Intent(context, NotificationService.class));
+                }
+                else {
+                    context.startService(new Intent(context, NotificationService.class));
+                }
+            }
+        });
     }
 
     @Override
@@ -108,8 +131,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         settings.setMapToolbarEnabled(false);
         settings.setCompassEnabled(true);
         mMap = googleMap;
-        if(lineOptions != null)
+        if(lineOptions != null) {
+            button.setEnabled(true);
             mMap.addPolyline(lineOptions);
+        }
 
         mMap.setMinZoomPreference(12);
         LatLng sydney = new LatLng(51.585843, 4.792213);
@@ -196,8 +221,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             lineOptions.addAll(legs);
             lineOptions.width(10);
             lineOptions.color(Color.RED);
-            if(mMap != null)
+            if(mMap != null) {
+                button.setEnabled(true);
                 mMap.addPolyline(lineOptions);
+            }
         }
         catch (JSONException e) {
             e.printStackTrace();

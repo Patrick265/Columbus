@@ -9,6 +9,7 @@ public class DatabaseQuery
 
 
     // COLUMNS IN MONUMENTS
+    public static final String COL_MONUMENT_ID = "id";
     public static final String COL_MONUMENT_MONUMENTNAME = "MonumentName";
     public static final String COL_MONUMENT_DESCRIPTION = "Description";
     public static final String COL_MONUMENT_CREATOR = "Creator";
@@ -20,6 +21,7 @@ public class DatabaseQuery
     public static final String COL_MONUMENT_ISVISITED = "IsVisited";
 
     // COLUMNS IN ROUTE
+    public static final String COL_ROUTE_ID = "id";
     public static final String COL_ROUTE_ROUTENAME = "RouteName";
     public static final String COL_ROUTE_ROUTEMONUMENTID = "RouteMonumentID";
     public static final String COL_ROUTE_DESCRIPTION = "Description";
@@ -28,7 +30,6 @@ public class DatabaseQuery
 
     // MAIN TABEL COLUMNS
     public static final String COL_MAIN_ROUTEID = "RouteID";
-    public static final String COL_MAIN_ROUTENAME = "RouteName";
     public static final String COL_MAIN_MONUMENTNAME = "MonumentName";
     public static final String COL_MAIN_ORDERMONUMENTS = "OrderMonuments";
 

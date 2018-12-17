@@ -156,7 +156,22 @@ public class DataStorage extends SQLiteOpenHelper
             values.put(DatabaseQuery.COL_ROUTE_FINSIHED, 0);
         }
         getWritableDatabase().insert(DatabaseQuery.TABLE_HEADER_ROUTE, null, values);
+        values.clear();
         Log.i("INSERTEDDB", "INSERTED ROUTE IN DB");
+
+        int index = 0;
+        for (Monument monument : route.getMonumentList())
+        {
+            addMonument(monument);
+            values.put(DatabaseQuery.COL_MAIN_ROUTEID, getRPrimaryKey(route));
+            values.put(DatabaseQuery.COL_MAIN_MONUMENTNAME, getMPrimaryKey(monument));
+            values.put(DatabaseQuery.COL_MAIN_ORDERMONUMENTS, index);
+            index++;
+        }
+
+        values.clear();
+        Log.i("INSERTEDDB", "INSERTED ROUTE IN DB");
+
     }
 
     public List<Route> retrieveAllRoutes() {
@@ -223,6 +238,68 @@ public class DataStorage extends SQLiteOpenHelper
             cursor.close();
             throw new Error("ROUTE COULD NOT BE FOUND BECAUSE EITHER IT DOES NOT EXIST OR INVALID PARAMETERS!");
         }
+    }
+
+
+    /**
+     * Retrieve the primary key id of the route.
+     * @param route For it to check on a route.
+     * @return The id number of the a specific route, if it cannot find a ID it will throw a error;
+     */
+    public int getRPrimaryKey(Route route) {
+        String query = "SELECT id FROM ROUTE WHERE RouteName =\"" + route.getName()  +"\"AND Length =" + route.getLength() + ";";
+        Log.d("QueryPrimaryKeyR", query);
+
+        Cursor cursor = getReadableDatabase().rawQuery(query, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+
+            if(cursor.getCount() > 0 ) {
+
+
+                int id = cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ID));
+                cursor.close();
+                return id;
+            }
+            else {
+                cursor.close();
+                throw new Error("ROUTE COULD NOT BE FOUND BECAUSE EITHER IT DOES NOT EXIST OR INVALID PARAMETERS!");
+            }
+        }
+
+        else {
+            throw new Error("CURSOR IS NULL");
+        }
+    }
+
+
+    /**
+     * Retrieve the primary key id of the monument.
+     * @param monument For it to check on a monument.
+     * @return The id number of the a specific monument, if it cannot find a ID it will throw a error;
+     */
+    public int getMPrimaryKey(Monument monument) {
+        String query = "SELECT id FROM MONUMENT WHERE MonumentName = \"" + monument.getName() + "\" AND Longitude =" + monument.getLongitude() + " AND Latitude =" +  monument.getLatitude() + ";";
+        Log.d("QueryPrimaryKeyM", query);
+
+        Cursor cursor = getReadableDatabase().rawQuery(query, null);
+
+
+        if(cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.getCount() > 0 ) {
+                int id = cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_ID));
+                cursor.close();
+                return id;
+            }
+            else {
+                cursor.close();
+                throw new Error("MONUMENT COULD NOT BE FOUND BECAUSE EITHER IT DOES NOT EXIST OR INVALID PARAMETERS!");
+            }
+        } else {
+            throw new Error("CURSOR IS NULL");
+        }
+
     }
 
 }
