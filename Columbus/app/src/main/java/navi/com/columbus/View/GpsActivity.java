@@ -295,7 +295,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onLocationAvailable(Location location)
     {
           this.lastLocation = location;
-        Toast.makeText(getApplicationContext(), "je locatie is geupdate", Toast.LENGTH_LONG);
+          Toast.makeText(getApplicationContext(), "je locatie is geupdate", Toast.LENGTH_LONG).show();
     }
 
 
