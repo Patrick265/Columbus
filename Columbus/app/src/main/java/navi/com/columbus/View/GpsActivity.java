@@ -235,7 +235,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         int i = 0;
         for(Monument monument: monuments)
         {
-            if(i < 20)
+            if(i < 23)
             {
                 path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
             }
