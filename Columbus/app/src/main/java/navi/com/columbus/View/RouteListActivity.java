@@ -52,5 +52,11 @@ public class RouteListActivity extends AppCompatActivity
             Intent intent = new Intent(v.getContext(), HelpActivity.class);
             startActivity(intent);
         });
+
+        routes.add(
+                new Route.Builder().description("aids")
+                        .name("TESTTTT")
+                        .build()
+        );
     }
 }
