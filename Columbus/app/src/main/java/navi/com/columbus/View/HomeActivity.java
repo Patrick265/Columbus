@@ -57,13 +57,6 @@ public class HomeActivity extends AppCompatActivity
         possibleBy = findViewById(R.id.home_VVVMessage);
         possibleBy.setText(R.string.home_possibleBy);
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(v ->
-        {
-            Intent intent = new Intent(v.getContext(), GpsActivity.class);
-            startActivity(intent);
-        });
-
         ImageButton helpButton = findViewById(R.id.home_HelpButton);
         helpButton.setOnClickListener(v ->
         {

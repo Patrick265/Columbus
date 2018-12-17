@@ -131,7 +131,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
 
         routes.add(
                 new Route.Builder().description("BlindWalls")
-                        .name("De route van Blind walls")
+                        .name(String.valueOf(R.string.bw_shortdescription))
                         .routeList(monumentsBlindwall)
                         .build()
         );
@@ -139,7 +139,8 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
     }
 
     @Override
-    public void onMonumentError(String err) {
+    public void onMonumentError(String err)
+    {
 
     }
 }
