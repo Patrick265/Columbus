@@ -56,6 +56,7 @@ import navi.com.columbus.Service.NotificationService;
 
 public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, LocationCallBackListener, OnMarkerClickListener
 {
+
     private GoogleMap mMap;
     private SupportMapFragment mapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -302,6 +303,42 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     {
           this.lastLocation = location;
           Toast.makeText(getApplicationContext(), "je locatie is geupdate", Toast.LENGTH_LONG).show();
+          float notificationDistance = 20.0f;
+          Monument closestMonument = null;
+          float distance ;
+          for(Monument monument:monuments)
+          {
+              Location monumentLocation = new Location("Monument");
+              monumentLocation.setLatitude(monument.getLatitude());
+              monumentLocation.setLongitude(monument.getLongitude());
+
+              distance = location.distanceTo(monumentLocation);
+              if(distance  < notificationDistance)
+              {
+                  notificationDistance = distance;
+                  closestMonument = monument;
+              }
+          }
+
+          if(closestMonument != null)
+          {
+              NotificationFragment dialog = new NotificationFragment();
+              Bundle args = new Bundle();
+              args.putString("monumentName", closestMonument.getName());
+              args.putString("makers", closestMonument.getCreator());
+              args.putString("constructionYear", String.valueOf(closestMonument.getConstructionYear()));
+              args.putString("imageURL", "https://memegenerator.net/img/instances/28117568/kella-niffo-je-ma-is-milf-maaaahng.jpg");
+              args.putString("description", closestMonument.getDescription());
+              args.putInt("id", closestMonument.getId());
+              dialog.setArguments(args);
+
+              dialog.show(getSupportFragmentManager(), "MyCustomDialog");
+          }
+
+
+
+
+
     }
 
 

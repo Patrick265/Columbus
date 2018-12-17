@@ -35,6 +35,7 @@ public class HistorischeKMFactory
 
     private ArrayList<Monument> getHistKmList()
     {
+        ArrayList<Monument> sightseeingslist = new ArrayList<>();
         ArrayList<Monument> tempList = new ArrayList<>();
 
             try
@@ -101,6 +102,10 @@ public class HistorischeKMFactory
                             .id(Integer.valueOf(nextLine[0]))
                             .build();
                     tempList.add(monument);
+                    if(monument.getName() != null)
+                    {
+                        sightseeingslist.add(monument);
+                    }
                     count++;
                     if(count == 24)
                         break;
@@ -109,7 +114,7 @@ public class HistorischeKMFactory
             {
                 e.printStackTrace();
             }
-            return tempList;
+            return sightseeingslist;
     }
 
 
