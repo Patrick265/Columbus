@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class Monument implements Serializable
 {
+    private int id;
     private String name;
     private String description;
     private String creator;
@@ -42,7 +43,7 @@ public class Monument implements Serializable
         private double latitude;
         private int constructionYear;
         private boolean isVisited;
-
+        private int id;
         public Builder name(String name)
         {
             this.name = name;
@@ -97,10 +98,25 @@ public class Monument implements Serializable
             return this;
         }
 
+        public Builder id(int id)
+        {
+            this.id = id;
+            return this;
+        }
         public Monument build()
         {
             return new Monument(this);
         }
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public void setName(String name)
@@ -203,7 +219,8 @@ public class Monument implements Serializable
     public String toString()
     {
         return "Monument{" +
-                "name='" + name + '\'' +
+                "id= "+ id +
+                ", name='" + name + '\'' +
                 ", constructionYear=" + constructionYear +
                 ", description='" + description + '\'' +
                 ", creator='" + creator + '\'' +

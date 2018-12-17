@@ -97,6 +97,7 @@ public class HistorischeKMFactory
                             .latitude(Double.valueOf(nextLine[1]))
                             .name(nextLine[3])
                             .description(nextLine[4])
+                            .id(Integer.valueOf(nextLine[0]))
                             .build();
                     tempList.add(monument);
                     count++;
