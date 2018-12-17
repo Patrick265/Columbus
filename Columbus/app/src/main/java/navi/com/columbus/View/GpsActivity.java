@@ -3,6 +3,8 @@ package navi.com.columbus.View;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -46,7 +48,6 @@ import navi.com.columbus.Service.NotificationService;
 
 public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, LocationCallBackListener, OnMarkerClickListener
 {
-
     private GoogleMap mMap;
     private SupportMapFragment mapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -263,14 +264,18 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                     gpsActivity.runOnUiThread(() ->
                     {
                         int i = 0;
-                        for (Monument monument: route.getMonumentList()) {
-                            if (i < 24) {
+                        for (Monument monument: route.getMonumentList())
+                        {
+                            if (i < 24)
+                            {
                                 LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.location))).setZIndex(monument.getId());
-                                if(i < 23) {
+                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setZIndex(monument.getId());
+                                if(i < 23)
+                                {
                                     path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
                                 }
                             }
+
                             i++;
                         }
 
@@ -281,6 +286,13 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             }
         },0, 1000);
+    }
+
+    public Bitmap resizeMapIcons()
+    {
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.location_pin);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, 36, 58, false);
+        return resizedBitmap;
     }
 
     void fakeCallBack()
