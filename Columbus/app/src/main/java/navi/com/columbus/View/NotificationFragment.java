@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,5 +47,15 @@ public class NotificationFragment extends DialogFragment
         description.setText(args.getString("description"));
 
         return view;
+    }
+
+    @Override
+    public void onResume()
+    {
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        super.onResume();
     }
 }

@@ -9,14 +9,9 @@
     android:orientation="vertical"
     android:padding="5dp">
 
-    <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="380dp"
-        android:layout_height="700dp"
-        app:cardBackgroundColor="@color/colorGray"
-        tools:context=".View.NotificationFragment">
-
-        <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -76,7 +71,7 @@
             <ImageView
                 android:id="@+id/fn_Image"
                 android:layout_width="0dp"
-                android:layout_height="250dp"
+                android:layout_height="220dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
@@ -117,22 +112,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/fn_Description"
+            <ScrollView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:scrollbars="vertical"
-                android:text="Description"
-                android:textColor="@color/colorSecundary"
-                android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@+id/fn_OkButton"
                 app:layout_constraintEnd_toEndOf="@+id/fn_Background"
                 app:layout_constraintStart_toStartOf="@+id/fn_Background"
-                app:layout_constraintTop_toBottomOf="@+id/fn_DescriptionTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/fn_DescriptionTitle">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/fn_Description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scrollbars="vertical"
+                        android:text="Description"
+                        android:textColor="@color/colorSecundary"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </ScrollView>
+
 
             <Button
                 android:id="@+id/fn_OkButton"
@@ -149,7 +160,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/fn_Background" />
 
         </android.support.constraint.ConstraintLayout>
-
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
