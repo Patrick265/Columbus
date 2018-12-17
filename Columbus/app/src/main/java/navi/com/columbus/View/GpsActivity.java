@@ -238,8 +238,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         int i = 0;
         for(Monument monument: monuments)
         {
-
-            if(i < 20)
+            if(i < 23)
             {
                 LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
