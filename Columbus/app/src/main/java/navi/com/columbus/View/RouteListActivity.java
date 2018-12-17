@@ -54,7 +54,7 @@ public class RouteListActivity extends AppCompatActivity
         });
 
         routes.add(
-                new Route.Builder().description("aids")
+                new Route.Builder().description("Gerdtinus is autisch")
                         .name("TESTTTT")
                         .build()
         );
