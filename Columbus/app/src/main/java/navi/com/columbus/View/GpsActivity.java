@@ -72,6 +72,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_gps);
         lastLocation = null;
         gpsActivity = this;
+        monuments = new ArrayList<>();
 
         LocationCallbackHandler loc = new LocationCallbackHandler();
         loc.addListener(this);
@@ -82,6 +83,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         lineOptions = null;
 
         Route route = (Route)getIntent().getExtras().get("ROUTE");
+        monuments = route.getMonumentList();
         if(route.getName().equals("De route van Blind walls"))
         {
             callAPI(route);
@@ -255,7 +257,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void callAPI(Route route)
     {
-        this.monuments = route.getMonumentList();
         ApiHandler test = new ApiHandler(this, listener);
         ArrayList<LatLng> path = new ArrayList<>();
 
