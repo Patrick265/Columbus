@@ -45,7 +45,6 @@ public class ApiHandler {
         String waypointsPoly = PolyUtil.encode(path);
         String url = URLDIRECTIONS + "origin=" + origin.latitude + "," + origin.longitude + "&destination=" + destination.latitude + "," + destination.longitude + "&waypoints=enc:" + waypointsPoly + ":&mode=walking&key=" + API_KEY;
 
-        listener.onRouteAvailable(new JSONObject());
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
