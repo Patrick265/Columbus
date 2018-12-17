@@ -218,8 +218,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
             lineOptions = new PolylineOptions();
             lineOptions.addAll(legs);
-            lineOptions.width(10);
-            lineOptions.color(Color.RED);
+            lineOptions.width(15);
+            lineOptions.color(getResources().getColor(R.color.colorPrimary));
             if(mMap != null) {
                 mMap.addPolyline(lineOptions);
             }
