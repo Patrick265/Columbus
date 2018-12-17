@@ -31,6 +31,7 @@ public class Monument implements Serializable
         this.latitude = builder.latitude;
         this.constructionYear = builder.constructionYear;
         this.isVisited = builder.isVisited;
+        this.id = builder.id;
     }
 
     public static class Builder {
