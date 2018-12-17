@@ -58,7 +58,7 @@ public class NotificationService extends Service {
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
 
-        locationCallbackHandler = locationCallbackHandler.getInstance();
+        locationCallbackHandler = LocationCallbackHandler.getInstance();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 

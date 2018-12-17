@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 
@@ -56,6 +58,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private Location lastLocation;
     private GpsActivity gpsActivity;
     private ArrayList<Monument> monuments;
+    private List<LatLng> legs;
+    private PolylineOptions lineOptions2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -133,9 +137,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         settings.setCompassEnabled(true);
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
-        if(lineOptions != null) {
-            mMap.addPolyline(lineOptions);
-        }
 
         mMap.setMinZoomPreference(12);
         LatLng currentLocation = new LatLng(51.585843, 4.792213);
@@ -149,19 +150,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location)
     {
-        Location mLastLocation = location;
-        // use latitude and longitude given by
-        // location.getLatitude(), location.getLongitude()
-        // for updated location marker
-        Log.d("aaaaaaaa===>", "" + location.getLatitude() + "\n" + location.getLongitude());
-        // displayLocation();
 
-        // to remove old markers
-        mMap.clear();
-        final LatLng loc = new LatLng(location.getLongitude(), location.getLongitude());
-
-        Marker ham = mMap.addMarker(new MarkerOptions().position(loc).title("This is Me").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_background)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
     }
 
     @Override
@@ -225,13 +214,18 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     {
         try
         {
-            List<LatLng> legs = PolyUtil.decode(object.getJSONArray("routes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
+            legs = PolyUtil.decode(object.getJSONArray("routes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
 
+            lineOptions2 = new PolylineOptions();
+            lineOptions2.addAll(legs);
+            lineOptions2.width(15);
+            lineOptions2.color(Color.GRAY);
             lineOptions = new PolylineOptions();
             lineOptions.addAll(legs);
             lineOptions.width(15);
             lineOptions.color(getResources().getColor(R.color.colorPrimary));
             if(mMap != null) {
+                mMap.addPolyline(lineOptions2);
                 mMap.addPolyline(lineOptions);
             }
         }
@@ -338,7 +332,25 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
           }
 
 
+        float killDistance = 15.0f;
+          if(legs != null) {
+              boolean onPath = PolyUtil.isLocationOnPath(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), legs, false, 10);
+              if (onPath) {
+                  List<LatLng> points = new ArrayList<>(lineOptions.getPoints());
+                  for (LatLng point : points) {
+                      Location legLoc = new Location("wow");
+                      legLoc.setLatitude(point.latitude);
+                      legLoc.setLongitude(point.longitude);
 
+                      distance = location.distanceTo(legLoc);
+                      if (distance < killDistance) {
+                          lineOptions.getPoints().remove(point);
+                          mMap.addPolyline(lineOptions2);
+                          mMap.addPolyline(lineOptions);
+                      }
+                  }
+              }
+          }
 
 
     }
