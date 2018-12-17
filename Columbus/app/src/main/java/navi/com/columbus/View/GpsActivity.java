@@ -51,30 +51,30 @@ import navi.com.columbus.R;
 import navi.com.columbus.Service.ApiHandler;
 import navi.com.columbus.Service.BlindWallsDataHandler;
 import navi.com.columbus.Service.BlindWallsListener;
+import navi.com.columbus.Service.LocationCallBackListener;
 import navi.com.columbus.Service.LocationCallbackHandler;
 import navi.com.columbus.Service.MapsListener;
 import navi.com.columbus.Service.NotificationService;
 
-public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, BlindWallsListener {
+public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, BlindWallsListener, LocationCallBackListener {
 
     private GoogleMap mMap;
-    private LocationCallbackHandler loc;
     private SupportMapFragment mapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
-    private Location mLastLocation;
-    private JSONObject jsonObject;
     private PolylineOptions lineOptions;
     private MapsListener listener;
-    private TextView title;
-    private Button button;
+    private Location lastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
 
-        loc = new LocationCallbackHandler();
-        title = findViewById(R.id.gps_Title);
+        lastLocation = null;
+
+        LocationCallbackHandler loc = new LocationCallbackHandler();
+        loc.addListener(this);
+        TextView title = findViewById(R.id.gps_Title);
         title.setText(R.string.GPS_title);
 
         listener = this;
@@ -94,20 +94,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
 
-        button = findViewById(R.id.GPSStartRouteButton);
-        button.setEnabled(false);
         Context context = getApplicationContext();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(new Intent(context, NotificationService.class));
-                }
-                else {
-                    context.startService(new Intent(context, NotificationService.class));
-                }
-            }
-        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(context, NotificationService.class));
+        }
+        else {
+            context.startService(new Intent(context, NotificationService.class));
+        }
     }
 
     @Override
@@ -132,7 +126,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         settings.setCompassEnabled(true);
         mMap = googleMap;
         if(lineOptions != null) {
-            button.setEnabled(true);
             mMap.addPolyline(lineOptions);
         }
 
@@ -148,7 +141,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        mLastLocation = location;
+        Location mLastLocation = location;
         // use latitude and longitude given by
         // location.getLatitude(), location.getLongitude()
         // for updated location marker
@@ -214,7 +207,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onRouteAvailable(JSONObject object) {
         try {
-            jsonObject = object;
+            JSONObject jsonObject = object;
             List<LatLng> legs = PolyUtil.decode(jsonObject.getJSONArray("routes").getJSONObject(0).getJSONObject("overview_polyline").getString("points"));
 
             lineOptions = new PolylineOptions();
@@ -222,7 +215,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             lineOptions.width(10);
             lineOptions.color(Color.RED);
             if(mMap != null) {
-                button.setEnabled(true);
                 mMap.addPolyline(lineOptions);
             }
         }
@@ -250,13 +242,27 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             i++;
         }
 
-        test.getDirections(new LatLng(51.594112, 4.779417),
-                new LatLng(monuments.get(monuments.size()-1).getLatitude(),
-                        monuments.get(monuments.size()-1).getLongitude()), path);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(lastLocation != null) {
+                    test.getDirections(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
+                            new LatLng(monuments.get(monuments.size() - 1).getLatitude(),
+                                    monuments.get(monuments.size() - 1).getLongitude()), path);
+                    timer.cancel();
+                }
+            }
+        }, 0, 1000);
     }
 
     @Override
     public void onMonumentError(String err) {
 
+    }
+
+    @Override
+    public void onLocationAvailable(Location location) {
+          this.lastLocation = location;
     }
 }

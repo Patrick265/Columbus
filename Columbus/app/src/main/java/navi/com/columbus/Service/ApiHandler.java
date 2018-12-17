@@ -43,7 +43,7 @@ public class ApiHandler {
     public void getDirections(LatLng origin, LatLng destination, ArrayList<LatLng> path)
     {
         String waypointsPoly = PolyUtil.encode(path);
-        String url = URLDIRECTIONS + "origin=" + origin.latitude + "," + origin.longitude + "&destination=" + destination.latitude + "," + destination.longitude + "&waypoints=enc:" + waypointsPoly + ":&mode=walking&key=" + API_KEY;
+        String url = URLDIRECTIONS + "origin=" + origin.latitude + "," + origin.longitude + "&destination=" + destination.latitude + "," + destination.longitude + "&waypoints=optimize:true|enc:" + waypointsPoly + ":&mode=walking&key=" + API_KEY;
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
