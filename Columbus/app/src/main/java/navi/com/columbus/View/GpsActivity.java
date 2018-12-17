@@ -255,7 +255,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void callAPI(Route route)
     {
-        this.monuments = monuments;
+        this.monuments = route.getMonumentList();
         ApiHandler test = new ApiHandler(this, listener);
         ArrayList<LatLng> path = new ArrayList<>();
 
