@@ -63,6 +63,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private PolylineOptions lineOptions2;
     private TextView distanceLeft;
     private int totalDistance;
+    private Polyline mPolyLine;
+    private Polyline mPolyLine2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -351,8 +353,16 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                           lineOptions.getPoints().remove(point);
                           int d1 = (int)SphericalUtil.computeLength(lineOptions.getPoints());
                           distanceLeft.setText(d1 + "/" + totalDistance + " meter" );
-                          mMap.addPolyline(lineOptions2);
-                          mMap.addPolyline(lineOptions);
+                          if(mPolyLine != null) {
+                              mPolyLine.remove();
+                              mPolyLine2.remove();
+                          }
+                          mMap.clear();
+                          mPolyLine = this.mMap.addPolyline(lineOptions2);
+                          mPolyLine2 = this.mMap.addPolyline(lineOptions);
+
+                        //  mMap.addPolyline(lineOptions2);
+                         // mMap.addPolyline(lineOptions);
                       }
                   }
               }
