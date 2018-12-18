@@ -14,4 +14,5 @@
     <string name="permission_title">Locatietoestemming nodig</string>
     <string name="permission_message">Deze app heeft locatietoestemming nodig, geef aub toegang tot de locatie functionaliteit.</string>
     <string name="permission_denied">Geen toestemming</string>
+    <string name="LoadingValues">Bezig met het laden van waarden</string>
 </resources>

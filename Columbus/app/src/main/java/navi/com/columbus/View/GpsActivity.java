@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,20 +61,21 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private ArrayList<Monument> monuments;
     private List<LatLng> legs;
     private PolylineOptions lineOptions2;
+    private TextView distanceLeft;
+    private int totalDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
+        distanceLeft = findViewById(R.id.txt_distance);
         lastLocation = null;
         gpsActivity = this;
         monuments = new ArrayList<>();
 
         LocationCallbackHandler loc = new LocationCallbackHandler();
         loc.addListener(this);
-        TextView title = findViewById(R.id.gps_Title);
-        title.setText(R.string.GPS_title);
 
         listener = this;
         lineOptions = null;
@@ -227,6 +229,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             if(mMap != null) {
                 mMap.addPolyline(lineOptions2);
                 mMap.addPolyline(lineOptions);
+                totalDistance = (int)SphericalUtil.computeLength(lineOptions2.getPoints());
+                distanceLeft.setText(totalDistance + "/" + totalDistance + " meter");
             }
         }
         catch (JSONException e)
@@ -345,6 +349,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                       distance = location.distanceTo(legLoc);
                       if (distance < killDistance) {
                           lineOptions.getPoints().remove(point);
+                          int d1 = (int)SphericalUtil.computeLength(lineOptions.getPoints());
+                          distanceLeft.setText(d1 + "/" + totalDistance + " meter" );
                           mMap.addPolyline(lineOptions2);
                           mMap.addPolyline(lineOptions);
                       }
