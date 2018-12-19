@@ -251,7 +251,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView.onDestroy();
     }
     @Override
-    public void onLowMemory() {
+    public void onLowMemory()
+    {
         super.onLowMemory();
         mapView.onLowMemory();
     }
@@ -339,18 +340,16 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                             if (i < 24)
                             {
                                 LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
-                                //mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setZIndex(monument.getId());
-                                if(monument.isVisited()) {
+
+                                if(monument.isVisited())
                                     markers.add(mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeIcon(R.drawable.location_pin_visited)))));
-                                }
-                                else {
+                                else
                                     markers.add(mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeIcon(R.drawable.location_pin)))));
-                                }
+
                                 markers.get(markers.size()-1).setTag(monument);
+
                                 if(i < 23)
-                                {
                                     path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
-                                }
                             }
 
                             i++;
@@ -368,7 +367,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public Bitmap resizeIcon(int imagelocation)
     {
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), imagelocation);
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, 36, 58, false);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, 43, 70, false);
         return resizedBitmap;
     }
 
@@ -397,7 +396,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onLocationAvailable(Location location) {
+    public void onLocationAvailable(Location location)
+    {
         boolean connected = isConnected();
         if(!connected)
         {
@@ -407,21 +407,22 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         float notificationDistance = 20.0f;
         Monument closestMonument = null;
         float distance;
-        int i = 0;
-        for (Monument monument : monuments) {
+        for (Monument monument : monuments)
+        {
             Location monumentLocation = new Location("Monument");
             monumentLocation.setLatitude(monument.getLatitude());
             monumentLocation.setLongitude(monument.getLongitude());
 
             distance = location.distanceTo(monumentLocation);
-            if (distance < notificationDistance && !monument.isVisited()) {
+            if (distance < notificationDistance && !monument.isVisited())
+            {
                 notificationDistance = distance;
                 closestMonument = monument;
             }
-            i++;
         }
 
-        if (closestMonument != null) {
+        if (closestMonument != null)
+        {
             closestMonument.setVisited(true);
             this.storage.updateMonument(closestMonument);
 
@@ -438,11 +439,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         int counter = 0;
-        for (Monument monument : monuments) {
-            if (monument.isVisited()) {
+        for (Monument monument : monuments)
+        {
+            if (monument.isVisited())
+            {
                 counter++;
             }
-            if (counter == monuments.size()) {
+            if (counter == monuments.size())
+            {
                 this.route.setFinished(true);
                 this.storage.updateRoute(this.route);
             }
@@ -450,21 +454,26 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         float killDistance = 50.0f;
-        if (legs != null) {
+        if (legs != null)
+        {
             boolean onPath = PolyUtil.isLocationOnPath(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), legs, false, 50);
-            if (onPath) {
+            if (onPath)
+            {
                 List<LatLng> points = new ArrayList<>(lineOptions.getPoints());
-                for (LatLng point : points) {
+                for (LatLng point : points)
+                {
                     Location legLoc = new Location("wow");
                     legLoc.setLatitude(point.latitude);
                     legLoc.setLongitude(point.longitude);
 
                     distance = location.distanceTo(legLoc);
-                    if (distance < killDistance) {
+                    if (distance < killDistance)
+                    {
                         lineOptions.getPoints().remove(point);
                         int d1 = (int) SphericalUtil.computeLength(lineOptions.getPoints());
                         distanceLeft.setText("± " + d1 / 100 * 100 + "/" + totalDistance / 100 * 100 + " meter");
-                        if (mPolyLine != null) {
+                        if (mPolyLine != null)
+                        {
                             mPolyLine.remove();
                             mPolyLine2.remove();
                         }
@@ -516,7 +525,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "MyCustomDialog");
         }
-        return false;
+        return true;
     }
 }
 
