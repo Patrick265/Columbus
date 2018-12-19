@@ -71,6 +71,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private Polyline mPolyLine2;
     private DataStorage storage;
     private Dialog dMessage;
+    private Route route;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -90,7 +91,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         listener = this;
         lineOptions = null;
 
-        Route route = (Route)getIntent().getExtras().get("ROUTE");
+        this.route = (Route)getIntent().getExtras().get("ROUTE");
         monuments = route.getMonumentList();
         if(route.getName().equals(getResources().getString(R.string.bw_shortdescription)))
         {
@@ -328,9 +329,21 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
           if(closestMonument != null)
           {
               closestMonument.setVisited(true);
-
+              this.storage.updateMonument(closestMonument);
 
               showMessage(closestMonument);
+          }
+
+          int counter = 0;
+          for(Monument monument : monuments) {
+              if(monument.isVisited()) {
+                  counter++;
+              }
+              if(counter == monuments.size())
+              {
+                  this.route.setFinished(true);
+                  this.storage.updateRoute(this.route);
+              }
           }
 
 
