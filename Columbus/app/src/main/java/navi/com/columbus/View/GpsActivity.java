@@ -277,7 +277,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                             if (i < 24)
                             {
                                 LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setZIndex(monument.getId());
+                                //mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setZIndex(monument.getId());
+                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setTag(monument);
                                 if(i < 23)
                                 {
                                     path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
@@ -329,7 +330,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
               closestMonument.setVisited(true);
 
 
-              showMessage("Je bent er bijna", "Je bent in de buurt van: \n" + closestMonument.getName()+ "\n Klik op de marker om de informatie te zien!");
+              showMessage(closestMonument);
           }
 
 
@@ -366,7 +367,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void showMessage(String title, String message)
+    private void showMessage(Monument monument)
     {
         try
         {
@@ -376,12 +377,16 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
             TextView titleView = dMessage.findViewById(R.id.not_Title);
             TextView messageView = dMessage.findViewById(R.id.not_Message);
-            Button okButton = dMessage.findViewById(R.id.not_OkButton);
+            TextView tapMessageView = dMessage.findViewById(R.id.not_TapMessage);
+            TextView monNameView = dMessage.findViewById(R.id.not_monName);
 
-            titleView.setText(title);
-            messageView.setText(message);
+            titleView.setText(R.string.not_titleString);
+            messageView.setText(R.string.not_messString_start);
+            tapMessageView.setText(R.string.not_TapMessString);
+            monNameView.setText(monument.getName());
 
-            //okButton.setOnClickListener(v1 -> dMessage.dismisans());
+
+
 
         } catch(Exception e){
             Log.d("ERROR", e.toString());
@@ -396,7 +401,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         Monument clickedMonument = null;
         for (Monument monument : monuments)
         {
-            if (monument.getId() == marker.getZIndex())
+            if (monument.equals(marker.getTag()))
             {
                 clickedMonument = monument;
                 break;
@@ -409,7 +414,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             args.putString("monumentName", clickedMonument.getName());
             args.putString("makers", clickedMonument.getCreator());
             args.putString("constructionYear", String.valueOf(clickedMonument.getConstructionYear()));
-            args.putString("imageURL", "https://i.pinimg.com/originals/a1/c8/08/a1c808cc33467639d3af6304acfd1148.jpg");
+            args.putString("imageURL", clickedMonument.getImageURL());
             args.putString("description", clickedMonument.getDescription());
             dialog.setArguments(args);
 
