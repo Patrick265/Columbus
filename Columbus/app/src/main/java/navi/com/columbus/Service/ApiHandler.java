@@ -2,6 +2,7 @@ package navi.com.columbus.Service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,6 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import navi.com.columbus.DataModel.Route;
+import navi.com.columbus.R;
+
 import static java.lang.Thread.sleep;
 
 public class ApiHandler {
@@ -40,11 +44,14 @@ public class ApiHandler {
         this.context = context;
     }
 
-    public void getDirections(LatLng origin, LatLng destination, ArrayList<LatLng> path)
+    public void getDirections(LatLng origin, LatLng destination, ArrayList<LatLng> path, Route route, Resources resources)
     {
         String waypointsPoly = PolyUtil.encode(path);
-        String url = URLDIRECTIONS + "origin=" + origin.latitude + "," + origin.longitude + "&destination=" + destination.latitude + "," + destination.longitude + "&waypoints=optimize:true|enc:" + waypointsPoly + ":&mode=walking&key=" + API_KEY;
-
+        String url = "";
+        if(route.getName().equals(resources.getString(R.string.histkm_shortdescription)))
+            url = URLDIRECTIONS + "origin=" + origin.latitude + "," + origin.longitude + "&destination=" + destination.latitude + "," + destination.longitude + "&waypoints=enc:" + waypointsPoly + ":&mode=walking&key=" + API_KEY;
+        else
+            url = URLDIRECTIONS + "origin=" + origin.latitude + "," + origin.longitude + "&destination=" + destination.latitude + "," + destination.longitude + "&waypoints=optimize:true|enc:" + waypointsPoly + ":&mode=walking&key=" + API_KEY;
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

@@ -3,6 +3,7 @@ package navi.com.columbus.View;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,8 +45,14 @@ import com.google.maps.android.SphericalUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,6 +65,7 @@ import navi.com.columbus.Service.LocationCallBackListener;
 import navi.com.columbus.Service.LocationCallbackHandler;
 import navi.com.columbus.Service.MapsListener;
 import navi.com.columbus.Service.NotificationService;
+import navi.com.columbus.Service.SharedPreferencesClass;
 
 public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, MapsListener, LocationCallBackListener, OnMarkerClickListener
 {
@@ -79,12 +87,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private DataStorage storage;
     private Dialog dMessage;
     private Route route;
+    private ArrayList<Marker> markers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
+        markers = new ArrayList<>();
         storage = new DataStorage(getApplicationContext());
         dMessage = new Dialog(this);
         distanceLeft = findViewById(R.id.gps_Distance);
@@ -94,14 +104,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         gpsActivity = this;
         monuments = new ArrayList<>();
 
+        this.route = (Route)getIntent().getExtras().get("ROUTE");
+
         LocationCallbackHandler loc = new LocationCallbackHandler();
         loc.addListener(this);
 
         listener = this;
         lineOptions = null;
 
-        this.route = (Route)getIntent().getExtras().get("ROUTE");
-        monuments = route.getMonumentList();
         monuments = route.getMonumentList();
         if(route.getName().equals(getResources().getString(R.string.bw_shortdescription)))
         {
@@ -313,7 +323,13 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                             {
                                 LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
                                 //mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setZIndex(monument.getId());
-                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setTag(monument);
+                                if(monument.isVisited()) {
+                                    markers.add(mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeIcon(R.drawable.location_pin_visited)))));
+                                }
+                                else {
+                                    markers.add(mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeIcon(R.drawable.location_pin)))));
+                                }
+                                markers.get(markers.size()-1).setTag(monument);
                                 if(i < 23)
                                 {
                                     path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
@@ -325,88 +341,93 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
                         test.getDirections(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
                                 new LatLng(route.getMonumentList().get(route.getMonumentList().size() - 1).getLatitude(),
-                                        route.getMonumentList().get(route.getMonumentList().size() - 1).getLongitude()), path);
+                                        route.getMonumentList().get(route.getMonumentList().size() - 1).getLongitude()), path, route, getResources());
                     });
                 }
             }
         },0, 1000);
     }
 
-    public Bitmap resizeMapIcons()
+    public Bitmap resizeIcon(int imagelocation)
     {
-        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.location_pin);
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), imagelocation);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, 36, 58, false);
         return resizedBitmap;
     }
 
     @Override
-    public void onLocationAvailable(Location location)
-    {
-          this.lastLocation = location;
-          float notificationDistance = 20.0f;
-          Monument closestMonument = null;
-          float distance ;
-          for(Monument monument:monuments)
-          {
-              Location monumentLocation = new Location("Monument");
-              monumentLocation.setLatitude(monument.getLatitude());
-              monumentLocation.setLongitude(monument.getLongitude());
+    public void onLocationAvailable(Location location) {
+        this.lastLocation = location;
+        float notificationDistance = 20.0f;
+        Monument closestMonument = null;
+        float distance;
+        int i = 0;
+        for (Monument monument : monuments) {
+            Location monumentLocation = new Location("Monument");
+            monumentLocation.setLatitude(monument.getLatitude());
+            monumentLocation.setLongitude(monument.getLongitude());
 
-              distance = location.distanceTo(monumentLocation);
-              if(distance  < notificationDistance)
-              {
-                  notificationDistance = distance;
-                  closestMonument = monument;
-              }
-          }
+            distance = location.distanceTo(monumentLocation);
+            if (distance < notificationDistance && !monument.isVisited()) {
+                notificationDistance = distance;
+                closestMonument = monument;
+            }
+            i++;
+        }
 
-          if(closestMonument != null)
-          {
-              closestMonument.setVisited(true);
-              this.storage.updateMonument(closestMonument);
+        if (closestMonument != null) {
+            closestMonument.setVisited(true);
+            this.storage.updateMonument(closestMonument);
 
-              showMessage(closestMonument);
-          }
+            showMessage(closestMonument);
 
-          int counter = 0;
-          for(Monument monument : monuments) {
-              if(monument.isVisited()) {
-                  counter++;
-              }
-              if(counter == monuments.size())
-              {
-                  this.route.setFinished(true);
-                  this.storage.updateRoute(this.route);
-              }
-          }
+            for(Marker marker: markers)
+            {
+                if(marker.getPosition().latitude == closestMonument.getLatitude() && marker.getPosition().longitude == closestMonument.getLongitude() )
+                {
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeIcon(R.drawable.location_pin_visited)));
+                    break;
+                }
+            }
+        }
+
+        int counter = 0;
+        for (Monument monument : monuments) {
+            if (monument.isVisited()) {
+                counter++;
+            }
+            if (counter == monuments.size()) {
+                this.route.setFinished(true);
+                this.storage.updateRoute(this.route);
+            }
+        }
 
 
         float killDistance = 50.0f;
-          if(legs != null) {
-              boolean onPath = PolyUtil.isLocationOnPath(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), legs, false, 50);
-              if (onPath) {
-                  List<LatLng> points = new ArrayList<>(lineOptions.getPoints());
-                  for (LatLng point : points) {
-                      Location legLoc = new Location("wow");
-                      legLoc.setLatitude(point.latitude);
-                      legLoc.setLongitude(point.longitude);
+        if (legs != null) {
+            boolean onPath = PolyUtil.isLocationOnPath(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), legs, false, 50);
+            if (onPath) {
+                List<LatLng> points = new ArrayList<>(lineOptions.getPoints());
+                for (LatLng point : points) {
+                    Location legLoc = new Location("wow");
+                    legLoc.setLatitude(point.latitude);
+                    legLoc.setLongitude(point.longitude);
 
-                      distance = location.distanceTo(legLoc);
-                      if (distance < killDistance) {
-                          lineOptions.getPoints().remove(point);
-                          int d1 = (int)SphericalUtil.computeLength(lineOptions.getPoints());
-                          distanceLeft.setText("± " + d1/100 *100 + "/" + totalDistance/100*100 + " meter" );
-                          if(mPolyLine != null) {
-                              mPolyLine.remove();
-                              mPolyLine2.remove();
-                          }
-                          mMap.clear();
-                          mPolyLine = this.mMap.addPolyline(lineOptions2);
-                          mPolyLine2 = this.mMap.addPolyline(lineOptions);
-                      }
-                  }
-              }
-          }
+                    distance = location.distanceTo(legLoc);
+                    if (distance < killDistance) {
+                        lineOptions.getPoints().remove(point);
+                        int d1 = (int) SphericalUtil.computeLength(lineOptions.getPoints());
+                        distanceLeft.setText("± " + d1 / 100 * 100 + "/" + totalDistance / 100 * 100 + " meter");
+                        if (mPolyLine != null) {
+                            mPolyLine.remove();
+                            mPolyLine2.remove();
+                        }
+                        mPolyLine = this.mMap.addPolyline(lineOptions2);
+                        mPolyLine2 = this.mMap.addPolyline(lineOptions);
+                    }
+                }
+            }
+        }
     }
 
     private void showMessage(Monument monument)
@@ -450,5 +471,31 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             dialog.show(getSupportFragmentManager(), "MyCustomDialog");
         }
         return false;
+    }
+}
+
+class MonumentVisited implements Serializable {
+    private Monument monument;
+    private boolean isVisited;
+
+    public MonumentVisited(Monument monument, boolean isVisited) {
+        this.monument = monument;
+        this.isVisited = isVisited;
+    }
+
+    public Monument getMonument() {
+        return monument;
+    }
+
+    public void setMonument(Monument monument) {
+        this.monument = monument;
+    }
+
+    public boolean getIsVisited() {
+        return isVisited;
+    }
+
+    public void setIsVisited(boolean isVisited) {
+        this.isVisited = isVisited;
     }
 }
