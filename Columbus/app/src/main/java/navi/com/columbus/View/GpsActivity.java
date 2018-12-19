@@ -443,19 +443,9 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public boolean onMarkerClick(Marker marker)
     {
         NotificationFragment dialog = new NotificationFragment();
-
-        Monument clickedMonument = null;
-        for (Monument monument : monuments)
+        if (marker.getTag() != null)
         {
-            if (monument.equals(marker.getTag()))
-            {
-                clickedMonument = monument;
-                break;
-            }
-        }
-
-        if (clickedMonument != null)
-        {
+            Monument clickedMonument = (Monument) marker.getTag();
             Bundle args = new Bundle();
             args.putString("monumentName", clickedMonument.getName());
             args.putString("makers", clickedMonument.getCreator());
