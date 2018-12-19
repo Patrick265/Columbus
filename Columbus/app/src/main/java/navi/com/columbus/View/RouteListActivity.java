@@ -148,10 +148,11 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
                         .build()
         );
 
-
-        for(Route route : this.routes) {
+        for(Route route : this.routes)
+        {
             this.storage.addRoute(route);
         }
+
         mAdapter.notifyDataSetChanged();
     }
 

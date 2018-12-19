@@ -43,7 +43,7 @@ public class NotificationService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Columbus")
                 .setContentText("GPS service")
-                .setSmallIcon(R.drawable.columbus)
+                .setSmallIcon(R.drawable.not_icon)
                 .setContentIntent(pendingIntent)
                 .build();
 

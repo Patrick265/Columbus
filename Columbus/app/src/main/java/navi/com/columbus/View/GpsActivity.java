@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -274,7 +276,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 mMap.addPolyline(lineOptions2);
                 mMap.addPolyline(lineOptions);
                 totalDistance = (int)SphericalUtil.computeLength(lineOptions2.getPoints());
-                distanceLeft.setText("± "+totalDistance/100*100+ "/" + totalDistance/100*100 + " meter");
+                distanceLeft.setText("± "+totalDistance/10*10+ "/" + totalDistance/10*10 + " meter");
 
                 TextView distanceLeftTitle = findViewById(R.id.gps_DistanceLeftText);
                 distanceLeftTitle.setText(getResources().getString(R.string.distance_left_title));
@@ -289,6 +291,18 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 constraintSet.clone(c);
                 constraintSet.connect(R.id.gps_Map, ConstraintSet.BOTTOM, R.id.gps_BottomBar, ConstraintSet.TOP,0);
                 constraintSet.applyTo(c);
+
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+                for (LatLng latLng : lineOptions2.getPoints())
+                {
+                    builder.include(latLng);
+                }
+
+                final LatLngBounds bounds = builder.build();
+
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+                mMap.animateCamera(cu);
             }
         }
         catch (JSONException e)
