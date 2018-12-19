@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import navi.com.columbus.DataModel.Monument;
 import navi.com.columbus.R;
 
 public class NotificationFragment extends DialogFragment
@@ -35,16 +36,17 @@ public class NotificationFragment extends DialogFragment
         okButton = view.findViewById(R.id.fn_OkButton);
         Bundle args = getArguments();
 
+        Monument monument = (Monument) args.getSerializable("monument");
 
         okButton.setOnClickListener(view1 -> getDialog().dismiss());
 
-        String imageURL = args.getString("imageURL");
+        String imageURL = monument.getImageURL();
         Picasso.get().load(imageURL).into(image);
 
-        monumentName.setText(args.getString("monumentName"));
-        makers.setText(args.getString("makers"));
-        constructionYear.setText(args.getString("constructionYear"));
-        description.setText(args.getString("description"));
+        monumentName.setText(monument.getName());
+        makers.setText(monument.getCreator());
+        //constructionYear.setText(monument.getConstructionYear());
+        description.setText(monument.getDescription());
 
         return view;
     }
