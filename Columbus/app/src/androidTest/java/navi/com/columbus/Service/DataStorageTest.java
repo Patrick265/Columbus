@@ -139,23 +139,6 @@ public class DataStorageTest
     }
 
     @Test
-    public void listAllMain()
-    {
-        storage.listAllMain();
-    }
-
-    @Test
-    public void retrieveMonumentsOnRoute()
-    {
-    }
-
-    @Test
-    public void listAllRoute()
-    {
-        this.storage.listAllRoute();
-    }
-
-    @Test
     public void onConfigure()
     {
     }

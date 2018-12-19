@@ -103,7 +103,6 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
         BlindWallsListener listener = this;
         BlindWallsDataHandler handler = new BlindWallsDataHandler(this, listener);
 
-        storage.retrieveAllRoutes().size();
         if(storage.retrieveAllRoutes().size() == 0) {
             handler.getWalls();
             routes.add(historischeKMFactory.getHistorischeKilometer(this));

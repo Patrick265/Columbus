@@ -167,9 +167,7 @@ public class DataStorage extends SQLiteOpenHelper
             values.put(DatabaseQuery.COL_ROUTE_FINISHED, 0);
         }
 
-        long i = getWritableDatabase().insert(DatabaseQuery.TABLE_HEADER_ROUTE, null, values);
-
-        Log.i("ALISTANR", String.valueOf(i));
+        getWritableDatabase().insert(DatabaseQuery.TABLE_HEADER_ROUTE, null, values);
         values.clear();
         Log.i("INSERTEDDB", "INSERTED ROUTE IN DB");
 
@@ -198,8 +196,6 @@ public class DataStorage extends SQLiteOpenHelper
         String query = "SELECT * FROM ROUTE;";
         Log.d("QUERYALLROUTE", query);
 
-        String s = DatabaseUtils.dumpCursorToString(this.getReadableDatabase().rawQuery("SELECT * FROM MONUMENT", null));
-        Log.i("DUMP", s);
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
         if(cursor != null)
         {
@@ -227,39 +223,6 @@ public class DataStorage extends SQLiteOpenHelper
         return routes;
     }
 
-    public void listAllMain() {
-        String query = "SELECT * FROM " + DatabaseQuery.TABLE_HEADER_MAIN;
-        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
-        String entry = null;
-        if(cursor != null) {
-            cursor.moveToFirst();
-                do {
-
-
-                    entry = cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MAIN_ROUTEID)) + " \n" +
-                                    cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MAIN_MONUMENTNAME)) + " \n" +
-                                    cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MAIN_ORDERMONUMENTS)) + " \n" +
-                    Log.i("ENTRY", entry);
-                } while(cursor.moveToNext());
-            }
-    }
-
-    public void listAllRoute() {
-        String query = "SELECT * FROM " + DatabaseQuery.TABLE_HEADER_ROUTE;
-        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
-        String entry = null;
-        if(cursor != null) {
-            cursor.moveToFirst();
-            do {
-                entry = cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ID)) + " \n" +
-                        cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ROUTENAME)) + " \n" +
-                        cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_DESCRIPTION)) + " \n" +
-                        cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_DESCRIPTION)) + " \n" +
-                        cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_FINISHED));
-                        Log.i("ENTRY", entry);
-            } while(cursor.moveToNext());
-        }
-    }
 
 
     /**
@@ -426,5 +389,44 @@ public class DataStorage extends SQLiteOpenHelper
             throw new Error("CURSOR IS NULL");
         }
 
+    }
+
+
+    public void updateMonument(Monument monument) {
+
+        int id = getMPrimaryKey(monument);
+        ContentValues values = new ContentValues();
+        values.put(DatabaseQuery.COL_MONUMENT_MONUMENTNAME, monument.getName());
+        values.put(DatabaseQuery.COL_MONUMENT_DESCRIPTION, monument.getDescription());
+        values.put(DatabaseQuery.COL_MONUMENT_CREATOR, monument.getCreator());
+        values.put(DatabaseQuery.COL_MONUMENT_SOUNDFILEURL, monument.getSoundURL());
+        values.put(DatabaseQuery.COL_MONUMENT_IMAGEURL, monument.getImageURL());
+        values.put(DatabaseQuery.COL_MONUMENT_LATITUDE, monument.getLatitude());
+        values.put(DatabaseQuery.COL_MONUMENT_LONGITUDE, monument.getLongitude());
+        values.put(DatabaseQuery.COL_MONUMENT_CONSTRUCTIONYEAR, monument.getConstructionYear());
+
+        if(monument.isVisited()) {
+            values.put(DatabaseQuery.COL_MONUMENT_ISVISITED, 1);
+        } else {
+            values.put(DatabaseQuery.COL_MONUMENT_ISVISITED, 0);
+        }
+
+        getWritableDatabase().update(DatabaseQuery.TABLE_HEADER_MONUMENT, values ,"id="+id,null);
+    }
+
+    public void updateRoute(Route route) {
+
+        int id = getRPrimaryKey(route);
+        ContentValues values = new ContentValues();
+        values.put(DatabaseQuery.COL_ROUTE_ROUTENAME, route.getName());
+        values.put(DatabaseQuery.COL_ROUTE_DESCRIPTION, route.getDescription());
+        values.put(DatabaseQuery.COL_ROUTE_LENGTH, route.getLength());
+
+        if(route.isFinished()) {
+            values.put(DatabaseQuery.COL_ROUTE_FINISHED, 1);
+        } else {
+            values.put(DatabaseQuery.COL_ROUTE_FINISHED, 0);
+        }
+        getWritableDatabase().update(DatabaseQuery.TABLE_HEADER_ROUTE, values ,"id="+id,null);
     }
 }
