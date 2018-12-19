@@ -102,9 +102,11 @@ public class HistorischeKMFactory
                             .name(nextLine[3])
                             .description(nextLine[4])
                             .id(Integer.valueOf(nextLine[0]))
+                            .constructionYear(1125)
+                            .creator("Breda")
                             .build();
                     tempList.add(monument);
-                    if(monument.getName() != null)
+                    if(monument.getName() != null && !monument.getName().equals(""))
                     {
                         sightseeingslist.add(monument);
                     }

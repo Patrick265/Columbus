@@ -17,4 +17,7 @@
     <string name="LoadingValues">Bezig met het laden van waarden</string>
     <string name="requireInternet">Deze applicatie heeft internet nodig om te kunnen functioneren.</string>
     <string name="InternetTitle">Zet alstublieft het internet aan.</string>
+    <string name="not_TapMessString">Klik buiten de notificatie om te sluiten</string>
+    <string name="not_messString_start">Je bent in de buurt van:\n\n\nKlik op de marker om de informatie te zien!</string>
+    <string name="not_titleString">Je bent er bijna...</string>
 </resources>

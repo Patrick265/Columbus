@@ -59,7 +59,7 @@ public class BlindWallsDataHandler {
                             //Blind Walls hebben geen sound;
                             JSONArray images = o.getJSONArray("images");
                             int index = new Random().nextInt(images.length());
-                            String imageURL = "https://api.blindwalls.gallery/" + images.getJSONObject(index).getString("url");
+                            String imageURL = "https://api.blindwalls.gallery/" + images.getJSONObject(1).getString("url");
 
                             Double longitude = o.getDouble("longitude");
                             Double latitude = o.getDouble("latitude");

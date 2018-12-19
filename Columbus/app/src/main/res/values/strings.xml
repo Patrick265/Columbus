@@ -18,4 +18,7 @@
     <string name="LoadingValues">Loading values</string>
     <string name="requireInternet">This application requires an internet connection to function.</string>
     <string name="InternetTitle">Please turn on the internet.</string>
+    <string name="not_TapMessString">Tap anywhere outside the notification to continue</string>
+    <string name="not_messString_start">You are near:\n\n\nTap the marker to see the information!</string>
+    <string name="not_titleString">Almost there...</string>
 </resources>
