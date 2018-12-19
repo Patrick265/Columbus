@@ -1,11 +1,13 @@
 package navi.com.columbus.View;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -13,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import navi.com.columbus.DataModel.Monument;
 import navi.com.columbus.DataModel.Route;
 import navi.com.columbus.R;
 import navi.com.columbus.Service.ApiHandler;
+import navi.com.columbus.Service.DataStorage;
 import navi.com.columbus.Service.LocationCallBackListener;
 import navi.com.columbus.Service.LocationCallbackHandler;
 import navi.com.columbus.Service.MapsListener;
@@ -65,16 +69,20 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private int totalDistance;
     private Polyline mPolyLine;
     private Polyline mPolyLine2;
+    private DataStorage storage;
+    private Dialog dMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-        distanceLeft = findViewById(R.id.txt_distance);
-        lastLocation = null;
-        gpsActivity = this;
-        monuments = new ArrayList<>();
+        this.distanceLeft = findViewById(R.id.txt_distance);
+        this.lastLocation = null;
+        this.gpsActivity = this;
+        this.monuments = new ArrayList<>();
+        this.storage = new DataStorage(getApplicationContext());
+        this.dMessage = new Dialog(this);
 
         LocationCallbackHandler loc = new LocationCallbackHandler();
         loc.addListener(this);
@@ -295,11 +303,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         return resizedBitmap;
     }
 
-    void fakeCallBack()
-    {
-
-    }
-
     @Override
     public void onLocationAvailable(Location location)
     {
@@ -323,17 +326,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
           if(closestMonument != null)
           {
-              NotificationFragment dialog = new NotificationFragment();
-              Bundle args = new Bundle();
-              args.putString("monumentName", closestMonument.getName());
-              args.putString("makers", closestMonument.getCreator());
-              args.putString("constructionYear", Integer.toString(closestMonument.getConstructionYear()));
-              args.putString("imageURL", "https://memegenerator.net/img/instances/28117568/kella-niffo-je-ma-is-milf-maaaahng.jpg");
-              args.putString("description", closestMonument.getDescription());
-              args.putInt("id", closestMonument.getId());
-              dialog.setArguments(args);
+              closestMonument.setVisited(true);
 
-              dialog.show(getSupportFragmentManager(), "MyCustomDialog");
+
+              showMessage("Je bent er bijna", "Je bent in de buurt van: \n" + closestMonument.getName()+ "\n Klik op de marker om de informatie te zien!");
           }
 
 
@@ -370,6 +366,27 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    private void showMessage(String title, String message)
+    {
+        try
+        {
+            dMessage.setContentView(R.layout.notification);
+            dMessage.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dMessage.show();
+
+            TextView titleView = dMessage.findViewById(R.id.not_Title);
+            TextView messageView = dMessage.findViewById(R.id.not_Message);
+            Button okButton = dMessage.findViewById(R.id.not_OkButton);
+
+            titleView.setText(title);
+            messageView.setText(message);
+
+            //okButton.setOnClickListener(v1 -> dMessage.dismisans());
+
+        } catch(Exception e){
+            Log.d("ERROR", e.toString());
+        }
+    }
 
     @Override
     public boolean onMarkerClick(Marker marker)

@@ -45,7 +45,6 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView routesTitle;
-    private Dialog dMessage;
 
 
 
@@ -67,7 +66,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
 
 
         //region ANDROID COMPONENTS
-        dMessage = new Dialog(this);
+
 
 
         routesTitle = findViewById(R.id.rl_Title);
@@ -92,8 +91,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
             startActivity(intent);
         });
 
-        Button errorMessageOpen = findViewById(R.id.rl_ErrorTest);
-        errorMessageOpen.setOnClickListener(v -> showMessage("Je moeder", "Dit is een kort test tekstje. De kat krabt de krullen van de kanker trap."));
+
         //endregion
 
 
@@ -101,7 +99,6 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
 
 
         HistorischeKMFactory historischeKMFactory = new HistorischeKMFactory();
-        this.monumentsBlindwall = new ArrayList<>();
 
         BlindWallsListener listener = this;
         BlindWallsDataHandler handler = new BlindWallsDataHandler(this, listener);
@@ -125,27 +122,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
 
 
 
-    private void showMessage(String title, String message)
-    {
-        try
-        {
-            dMessage.setContentView(R.layout.notification);
-            dMessage.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dMessage.show();
 
-            TextView titleView = dMessage.findViewById(R.id.not_Title);
-            TextView messageView = dMessage.findViewById(R.id.not_Message);
-            Button okButton = dMessage.findViewById(R.id.not_OkButton);
-
-            titleView.setText(title);
-            messageView.setText(message);
-
-            //okButton.setOnClickListener(v1 -> dMessage.dismisans());
-
-        } catch(Exception e){
-            Log.d("ERROR", e.toString());
-        }
-    }
 
     @Override
     public void onAllMonumentsAvailable(ArrayList<Monument> monuments)

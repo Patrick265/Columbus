@@ -12,7 +12,8 @@ public SharedPreferencesClass(SharedPreferences prefs){
     this.prefs = prefs;
 }
 
-public boolean changeprefs(String save, String string){
+public boolean changeprefs(String save, String string)
+    {
     SharedPreferences.Editor editor = prefs.edit();
     editor.putString(save, string);
     editor.apply();
