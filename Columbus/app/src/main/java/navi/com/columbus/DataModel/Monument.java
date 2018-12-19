@@ -14,7 +14,7 @@ public class Monument implements Serializable
     private String description;
     private String creator;
     private String soundURL;
-    private ArrayList<String> imageURL;
+    private String imageURL;
 
     private double longitude;
     private double latitude;
@@ -42,7 +42,7 @@ public class Monument implements Serializable
         private String description;
         private String creator;
         private String soundURL;
-        private ArrayList<String> imageURL;
+        private String imageURL;
         private double longitude;
         private double latitude;
         private int constructionYear;
@@ -72,7 +72,7 @@ public class Monument implements Serializable
             return this;
         }
 
-        public Builder imageURL(ArrayList<String> imageURL)
+        public Builder imageURL(String imageURL)
         {
             this.imageURL = imageURL;
             return this;
@@ -143,7 +143,7 @@ public class Monument implements Serializable
         this.soundURL = soundURL;
     }
 
-    public void setImageURL(ArrayList<String> imageURL)
+    public void setImageURL(String imageURL)
     {
         this.imageURL = imageURL;
     }
@@ -194,7 +194,7 @@ public class Monument implements Serializable
         return soundURL;
     }
 
-    public ArrayList<String> getImageURL()
+    public String getImageURL()
     {
         return imageURL;
     }

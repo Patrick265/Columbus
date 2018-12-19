@@ -30,7 +30,6 @@ public class DataStorage extends SQLiteOpenHelper
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL(DatabaseQuery.CREATE_TABLE_MONUMENT);
-        db.execSQL(DatabaseQuery.CREATE_TABLE_IMAGE);
         db.execSQL(DatabaseQuery.CREATE_TABLE_ROUTE);
         db.execSQL(DatabaseQuery.CREATE_TABLE_MAIN);
 
@@ -42,7 +41,6 @@ public class DataStorage extends SQLiteOpenHelper
     {
         db.execSQL("DROP TABLE IF EXISTS '" + DatabaseQuery.TABLE_HEADER_MAIN + "'");
         db.execSQL("DROP TABLE IF EXISTS '" + DatabaseQuery.TABLE_HEADER_ROUTE + "'");
-        db.execSQL("DROP TABLE IF EXISTS '" + DatabaseQuery.TABLE_HEADER_IMAGE + "'");
         db.execSQL("DROP TABLE IF EXISTS '" + DatabaseQuery.TABLE_HEADER_MONUMENT + "'");
 
         onCreate(db);
@@ -78,6 +76,7 @@ public class DataStorage extends SQLiteOpenHelper
                     .description(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_DESCRIPTION)))
                     .creator(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CREATOR)))
                     .soundURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_SOUNDFILEURL)))
+                    .imageURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_IMAGEURL)))
                     .latitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LATITUDE)))
                     .longitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LONGITUDE)))
                     .constructionYear(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CONSTRUCTIONYEAR)))
@@ -120,6 +119,7 @@ public class DataStorage extends SQLiteOpenHelper
                                            .description(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_DESCRIPTION)))
                                            .creator(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CREATOR)))
                                            .soundURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_SOUNDFILEURL)))
+                                            .imageURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_IMAGEURL)))
                                            .latitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LATITUDE)))
                                            .longitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LONGITUDE)))
                                            .constructionYear(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CONSTRUCTIONYEAR)))
@@ -144,6 +144,7 @@ public class DataStorage extends SQLiteOpenHelper
         values.put(DatabaseQuery.COL_MONUMENT_DESCRIPTION, monument.getDescription());
         values.put(DatabaseQuery.COL_MONUMENT_CREATOR, monument.getCreator());
         values.put(DatabaseQuery.COL_MONUMENT_SOUNDFILEURL, monument.getSoundURL());
+        values.put(DatabaseQuery.COL_MONUMENT_IMAGEURL, monument.getImageURL());
         values.put(DatabaseQuery.COL_MONUMENT_LATITUDE, monument.getLatitude());
         values.put(DatabaseQuery.COL_MONUMENT_LONGITUDE, monument.getLongitude());
         values.put(DatabaseQuery.COL_MONUMENT_CONSTRUCTIONYEAR, monument.getConstructionYear());
@@ -292,6 +293,7 @@ public class DataStorage extends SQLiteOpenHelper
                         .description(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_DESCRIPTION)))
                         .creator(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CREATOR)))
                         .soundURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_SOUNDFILEURL)))
+                        .imageURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_IMAGEURL)))
                         .latitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LATITUDE)))
                         .longitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LONGITUDE)))
                         .constructionYear(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CONSTRUCTIONYEAR)))
@@ -404,6 +406,7 @@ public class DataStorage extends SQLiteOpenHelper
         values.put(DatabaseQuery.COL_MONUMENT_DESCRIPTION, monument.getDescription());
         values.put(DatabaseQuery.COL_MONUMENT_CREATOR, monument.getCreator());
         values.put(DatabaseQuery.COL_MONUMENT_SOUNDFILEURL, monument.getSoundURL());
+        values.put(DatabaseQuery.COL_MONUMENT_IMAGEURL, monument.getImageURL());
         values.put(DatabaseQuery.COL_MONUMENT_LATITUDE, monument.getLatitude());
         values.put(DatabaseQuery.COL_MONUMENT_LONGITUDE, monument.getLongitude());
         values.put(DatabaseQuery.COL_MONUMENT_CONSTRUCTIONYEAR, monument.getConstructionYear());

@@ -4,7 +4,6 @@ public class DatabaseQuery
 {
     // TABLE NAMES
     public static final String TABLE_HEADER_MONUMENT = "MONUMENT";
-    public static final String TABLE_HEADER_IMAGE = "IMAGE";
     public static final String TABLE_HEADER_ROUTE = "ROUTE";
     public static final String TABLE_HEADER_MAIN = "ROUTEMONUMENT";
 
@@ -19,11 +18,6 @@ public class DatabaseQuery
     public static final String COL_MONUMENT_LONGITUDE = "Longitude";
     public static final String COL_MONUMENT_CONSTRUCTIONYEAR = "ConstructionYear";
     public static final String COL_MONUMENT_ISVISITED = "IsVisited";
-
-
-    //COLUMNS IN IMAGE
-    public static final String COL_IMAGE_ID = "id";
-    public static final String COL_IMAGE_URL = "Url";
 
     // COLUMNS IN ROUTE
     public static final String COL_ROUTE_ID = "id";
@@ -50,18 +44,9 @@ public class DatabaseQuery
             "    ImageURL VARCHAR(50),\n" +
             "    Latitude VARCHAR(50),\n" +
             "    Longitude VARCHAR(50),\n" +
-            "    ConstructionYear INTEGER(50)\n" +
+            "    ConstructionYear INTEGER(50),\n" +
+            "    IsVisited INTEGER\n" +
             ");";
-
-
-    public static final String CREATE_TABLE_IMAGE = "CREATE TABLE IF NOT EXISTS IMAGE (\n" +
-            "    id INTEGER,\n" +
-            "    Url VARCHAR(50),\n" +
-            "    CONSTRAINT id\n" +
-            "    FOREIGN KEY (id)\n" +
-            "    REFERENCES MONUMENT (id)\n" +
-            ");";
-
 
     public static final String CREATE_TABLE_ROUTE = "CREATE TABLE IF NOT EXISTS ROUTE (\n" +
             "\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -76,7 +61,6 @@ public class DatabaseQuery
             "    RouteID INTEGER,\n" +
             "    MonumentID INTEGER,\n" +
             "    OrderMonuments INTEGER,\n" +
-            "    IsVisited BOOLEAN,\n" +
             "    \n" +
             "\tCONSTRAINT RouteID\n" +
             "\t\tFOREIGN KEY (RouteID)\n" +
