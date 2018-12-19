@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -18,6 +20,7 @@ import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -355,8 +358,37 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         return resizedBitmap;
     }
 
+    private void checkInternetAvailable()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AppTheme);
+        dialogBuilder
+                .setTitle(R.string.internet_title)
+                .setMessage(R.string.requires_internet)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                    if(!isConnected())
+                    {
+                        checkInternetAvailable();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    private boolean isConnected()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+        return connected;
+    }
+
     @Override
     public void onLocationAvailable(Location location) {
+        boolean connected = isConnected();
+        if(!connected)
+        {
+            checkInternetAvailable();
+        }
         this.lastLocation = location;
         float notificationDistance = 20.0f;
         Monument closestMonument = null;
