@@ -101,6 +101,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
         this.route = (Route)getIntent().getExtras().get("ROUTE");
         monuments = route.getMonumentList();
+        monuments = route.getMonumentList();
         if(route.getName().equals(getResources().getString(R.string.bw_shortdescription)))
         {
             callAPI(route);
@@ -260,7 +261,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 mMap.addPolyline(lineOptions2);
                 mMap.addPolyline(lineOptions);
                 totalDistance = (int)SphericalUtil.computeLength(lineOptions2.getPoints());
-                distanceLeft.setText(totalDistance + "/" + totalDistance + " " + getResources().getString(R.string.meters));
+                distanceLeft.setText("± "+totalDistance/100*100+ "/" + totalDistance/100*100 + " meter");
 
                 TextView distanceLeftTitle = findViewById(R.id.gps_DistanceLeftText);
                 distanceLeftTitle.setText(getResources().getString(R.string.distance_left_title));
@@ -394,7 +395,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                       if (distance < killDistance) {
                           lineOptions.getPoints().remove(point);
                           int d1 = (int)SphericalUtil.computeLength(lineOptions.getPoints());
-                          distanceLeft.setText(d1 + "/" + totalDistance + " meter" );
+                          distanceLeft.setText("± " + d1/100 *100 + "/" + totalDistance/100*100 + " meter" );
                           if(mPolyLine != null) {
                               mPolyLine.remove();
                               mPolyLine2.remove();
@@ -403,8 +404,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                           mPolyLine = this.mMap.addPolyline(lineOptions2);
                           mPolyLine2 = this.mMap.addPolyline(lineOptions);
 
-                        //  mMap.addPolyline(lineOptions2);
-                         // mMap.addPolyline(lineOptions);
+                        // mMap.addPolyline(lineOptions2);
+                          // mMap.addPolyline(lineOptions);
                       }
                   }
               }
