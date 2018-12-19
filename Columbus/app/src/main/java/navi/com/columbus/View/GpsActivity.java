@@ -380,7 +380,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
               }
           }
 
-
         float killDistance = 15.0f;
           if(legs != null) {
               boolean onPath = PolyUtil.isLocationOnPath(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), legs, false, 10);
@@ -403,15 +402,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                           mMap.clear();
                           mPolyLine = this.mMap.addPolyline(lineOptions2);
                           mPolyLine2 = this.mMap.addPolyline(lineOptions);
-
-                        // mMap.addPolyline(lineOptions2);
-                          // mMap.addPolyline(lineOptions);
                       }
                   }
               }
           }
-
-
     }
 
     private void showMessage(Monument monument)
@@ -432,9 +426,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             tapMessageView.setText(R.string.not_TapMessString);
             monNameView.setText(monument.getName());
 
-
-
-
         } catch(Exception e){
             Log.d("ERROR", e.toString());
         }
@@ -448,16 +439,15 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         {
             Monument clickedMonument = (Monument) marker.getTag();
             Bundle args = new Bundle();
-            args.putString("monumentName", clickedMonument.getName());
-            args.putString("makers", clickedMonument.getCreator());
-            args.putString("constructionYear", String.valueOf(clickedMonument.getConstructionYear()));
-            args.putString("imageURL", clickedMonument.getImageURL());
-            args.putString("description", clickedMonument.getDescription());
+//            args.putString("monumentName", clickedMonument.getName());
+//            args.putString("makers", clickedMonument.getCreator());
+//            args.putString("constructionYear", String.valueOf(clickedMonument.getConstructionYear()));
+//            args.putString("imageURL", clickedMonument.getImageURL());
+//            args.putString("description", clickedMonument.getDescription());
+            args.putSerializable("monument", clickedMonument);
             dialog.setArguments(args);
-
             dialog.show(getSupportFragmentManager(), "MyCustomDialog");
         }
-
         return false;
     }
 }
