@@ -1,9 +1,12 @@
 package navi.com.columbus.View;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -87,6 +90,36 @@ public class HomeActivity extends AppCompatActivity
                 checkLocationPermission();
             }
         }
+
+        boolean connected = isConnected();
+        if(!connected)
+        {
+            checkInternetAvailable();
+        }
+    }
+
+    private void checkInternetAvailable()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AppTheme);
+        dialogBuilder
+                .setTitle(R.string.InternetTitle)
+                .setMessage(R.string.requireInternet)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                    if(!isConnected())
+                    {
+                        checkInternetAvailable();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    private boolean isConnected()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+        return connected;
     }
 
     private void checkLocationPermission()
