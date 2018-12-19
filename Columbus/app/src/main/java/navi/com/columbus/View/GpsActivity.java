@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -154,8 +155,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.setMinZoomPreference(12);
         LatLng currentLocation = new LatLng(51.585843, 4.792213);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) return;
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) return;
         mMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
     }
@@ -329,7 +329,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
           {
               closestMonument.setVisited(true);
               this.storage.updateMonument(closestMonument);
-
+              //Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+              //vibrator.vibrate(2000);
               showMessage("Je bent er bijna", "Je bent in de buurt van: \n" + closestMonument.getName()+ "\n Klik op de marker om de informatie te zien!");
           }
 
@@ -346,9 +347,9 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
           }
 
 
-        float killDistance = 15.0f;
+        float killDistance = 50.0f;
           if(legs != null) {
-              boolean onPath = PolyUtil.isLocationOnPath(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), legs, false, 10);
+              boolean onPath = PolyUtil.isLocationOnPath(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), legs, false, 50);
               if (onPath) {
                   List<LatLng> points = new ArrayList<>(lineOptions.getPoints());
                   for (LatLng point : points) {
