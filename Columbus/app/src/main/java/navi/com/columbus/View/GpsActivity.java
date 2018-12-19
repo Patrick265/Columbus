@@ -11,12 +11,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +72,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private List<LatLng> legs;
     private PolylineOptions lineOptions2;
     private TextView distanceLeft;
+    private ConstraintLayout bottomBar;
     private int totalDistance;
     private Polyline mPolyLine;
     private Polyline mPolyLine2;
@@ -79,12 +85,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-        this.distanceLeft = findViewById(R.id.txt_distance);
-        this.lastLocation = null;
-        this.gpsActivity = this;
-        this.monuments = new ArrayList<>();
-        this.storage = new DataStorage(getApplicationContext());
-        this.dMessage = new Dialog(this);
+        storage = new DataStorage(getApplicationContext());
+        dMessage = new Dialog(this);
+        distanceLeft = findViewById(R.id.gps_Distance);
+        bottomBar = findViewById(R.id.gps_BottomBar);
+        bottomBar.setVisibility(View.INVISIBLE);
+        lastLocation = null;
+        gpsActivity = this;
+        monuments = new ArrayList<>();
 
         LocationCallbackHandler loc = new LocationCallbackHandler();
         loc.addListener(this);
@@ -93,6 +101,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         lineOptions = null;
 
         this.route = (Route)getIntent().getExtras().get("ROUTE");
+        monuments = route.getMonumentList();
         monuments = route.getMonumentList();
         if(route.getName().equals(getResources().getString(R.string.bw_shortdescription)))
         {
@@ -108,6 +117,16 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
+
+        ImageButton helpButton = findViewById(R.id.gps_HelpButton);
+        helpButton.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(v.getContext(), HelpActivity.class);
+
+            intent.putExtra("HELP_TEXT", getResources().getString(R.string.gps_info));
+
+            startActivity(intent);
+        });
 
 
         mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gps_Map));
@@ -237,11 +256,26 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             lineOptions.addAll(legs);
             lineOptions.width(15);
             lineOptions.color(getResources().getColor(R.color.colorPrimary));
-            if(mMap != null) {
+            if(mMap != null)
+            {
                 mMap.addPolyline(lineOptions2);
                 mMap.addPolyline(lineOptions);
                 totalDistance = (int)SphericalUtil.computeLength(lineOptions2.getPoints());
-                distanceLeft.setText(totalDistance + "/" + totalDistance + " meter");
+                distanceLeft.setText("± "+totalDistance/100*100+ "/" + totalDistance/100*100 + " meter");
+
+                TextView distanceLeftTitle = findViewById(R.id.gps_DistanceLeftText);
+                distanceLeftTitle.setText(getResources().getString(R.string.distance_left_title));
+
+                ImageButton cancelRoute = findViewById(R.id.gps_CancelRouteButton);
+                cancelRoute.setOnClickListener(v -> this.finish());
+
+                bottomBar.setVisibility(View.VISIBLE);
+
+                ConstraintLayout c = findViewById(R.id.gps_ConstraintLayout);
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(c);
+                constraintSet.connect(R.id.gps_Map, ConstraintSet.BOTTOM, R.id.gps_BottomBar, ConstraintSet.TOP,0);
+                constraintSet.applyTo(c);
             }
         }
         catch (JSONException e)
@@ -278,7 +312,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                             if (i < 24)
                             {
                                 LatLng m = new LatLng(monument.getLatitude(), monument.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setZIndex(monument.getId());
+                                //mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setZIndex(monument.getId());
+                                mMap.addMarker(new MarkerOptions().position(m).title(monument.getName()).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons()))).setTag(monument);
                                 if(i < 23)
                                 {
                                     path.add(new LatLng(monument.getLatitude(), monument.getLongitude()));
@@ -329,9 +364,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
           {
               closestMonument.setVisited(true);
               this.storage.updateMonument(closestMonument);
-              //Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-              //vibrator.vibrate(2000);
-              showMessage("Je bent er bijna", "Je bent in de buurt van: \n" + closestMonument.getName()+ "\n Klik op de marker om de informatie te zien!");
+
+              showMessage(closestMonument);
           }
 
           int counter = 0;
@@ -361,7 +395,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                       if (distance < killDistance) {
                           lineOptions.getPoints().remove(point);
                           int d1 = (int)SphericalUtil.computeLength(lineOptions.getPoints());
-                          distanceLeft.setText(d1 + "/" + totalDistance + " meter" );
+                          distanceLeft.setText("± " + d1/100 *100 + "/" + totalDistance/100*100 + " meter" );
                           if(mPolyLine != null) {
                               mPolyLine.remove();
                               mPolyLine2.remove();
@@ -369,18 +403,13 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                           mMap.clear();
                           mPolyLine = this.mMap.addPolyline(lineOptions2);
                           mPolyLine2 = this.mMap.addPolyline(lineOptions);
-
-                        //  mMap.addPolyline(lineOptions2);
-                         // mMap.addPolyline(lineOptions);
                       }
                   }
               }
           }
-
-
     }
 
-    private void showMessage(String title, String message)
+    private void showMessage(Monument monument)
     {
         try
         {
@@ -390,12 +419,13 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
             TextView titleView = dMessage.findViewById(R.id.not_Title);
             TextView messageView = dMessage.findViewById(R.id.not_Message);
-            Button okButton = dMessage.findViewById(R.id.not_OkButton);
+            TextView tapMessageView = dMessage.findViewById(R.id.not_TapMessage);
+            TextView monNameView = dMessage.findViewById(R.id.not_monName);
 
-            titleView.setText(title);
-            messageView.setText(message);
-
-            //okButton.setOnClickListener(v1 -> dMessage.dismisans());
+            titleView.setText(R.string.not_titleString);
+            messageView.setText(R.string.not_messString_start);
+            tapMessageView.setText(R.string.not_TapMessString);
+            monNameView.setText(monument.getName());
 
         } catch(Exception e){
             Log.d("ERROR", e.toString());
@@ -406,30 +436,19 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     public boolean onMarkerClick(Marker marker)
     {
         NotificationFragment dialog = new NotificationFragment();
-
-        Monument clickedMonument = null;
-        for (Monument monument : monuments)
+        if (marker.getTag() != null)
         {
-            if (monument.getId() == marker.getZIndex())
-            {
-                clickedMonument = monument;
-                break;
-            }
-        }
-
-        if (clickedMonument != null)
-        {
+            Monument clickedMonument = (Monument) marker.getTag();
             Bundle args = new Bundle();
-            args.putString("monumentName", clickedMonument.getName());
-            args.putString("makers", clickedMonument.getCreator());
-            args.putString("constructionYear", String.valueOf(clickedMonument.getConstructionYear()));
-            args.putString("imageURL", "https://i.pinimg.com/originals/a1/c8/08/a1c808cc33467639d3af6304acfd1148.jpg");
-            args.putString("description", clickedMonument.getDescription());
+//            args.putString("monumentName", clickedMonument.getName());
+//            args.putString("makers", clickedMonument.getCreator());
+//            args.putString("constructionYear", String.valueOf(clickedMonument.getConstructionYear()));
+//            args.putString("imageURL", clickedMonument.getImageURL());
+//            args.putString("description", clickedMonument.getDescription());
+            args.putSerializable("monument", clickedMonument);
             dialog.setArguments(args);
-
             dialog.show(getSupportFragmentManager(), "MyCustomDialog");
         }
-
         return false;
     }
 }

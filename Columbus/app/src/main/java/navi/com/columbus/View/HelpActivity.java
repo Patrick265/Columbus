@@ -16,7 +16,6 @@ public class HelpActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_help);
 
         helpTitle = findViewById(R.id.help_Title);
@@ -24,6 +23,8 @@ public class HelpActivity extends AppCompatActivity
 
         info = findViewById(R.id.help_Tekst);
         info.setMovementMethod(new ScrollingMovementMethod());
-        info.setText(R.string.help_info);
+
+        String helpText = (String) getIntent().getExtras().get("HELP_TEXT");
+        info.setText(helpText);
     }
 }

@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gps_ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.GpsActivity">
@@ -55,8 +56,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ags" />
 
+    <TextView
+        android:id="@+id/gps_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="GPS"
+        android:textAlignment="center"
+        android:textColor="@color/colorSecundary"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/gps_Guideline1"
+        app:layout_constraintEnd_toStartOf="@+id/gps_Guideline3"
+        app:layout_constraintStart_toStartOf="@+id/gps_Guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
-        android:id="@+id/gps_InfoButton"
+        android:id="@+id/gps_HelpButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/ic_info_button"
@@ -66,6 +85,74 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/gps_Guideline3"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/gps_BottomBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gps_Guideline4">
+
+        <ImageView
+            android:id="@+id/gps_BottomBarBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/colorPrimary" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/gps_DistanceLeftText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Distance left:"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/gps_Distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Distance"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gps_DistanceLeftText" />
+        </android.support.constraint.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/gps_CancelRouteButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:drawable/presence_offline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.Guideline
         android:id="@+id/gps_Guideline1"
@@ -88,23 +175,11 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.88" />
 
-    <TextView
-        android:id="@+id/txt_distance"
+    <android.support.constraint.Guideline
+        android:id="@+id/gps_Guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="distance"
-        android:textAlignment="center"
-        android:textColor="@color/colorSecundary"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/gps_Guideline1"
-        app:layout_constraintEnd_toStartOf="@+id/gps_Guideline3"
-        app:layout_constraintStart_toStartOf="@+id/gps_Guideline2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.92" />
 
 </android.support.constraint.ConstraintLayout>

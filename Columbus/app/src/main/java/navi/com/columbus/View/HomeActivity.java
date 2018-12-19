@@ -3,7 +3,6 @@ package navi.com.columbus.View;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,25 +13,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Map;
-
 import navi.com.columbus.R;
-import navi.com.columbus.Service.ApiHandler;
-import navi.com.columbus.Service.MapsListener;
-import navi.com.columbus.Service.SharedPreferencesClass;
 
 public class HomeActivity extends AppCompatActivity
 {
@@ -64,6 +51,9 @@ public class HomeActivity extends AppCompatActivity
         helpButton.setOnClickListener(v ->
         {
             Intent intent = new Intent(v.getContext(), HelpActivity.class);
+
+            intent.putExtra("HELP_TEXT", getResources().getString(R.string.home_info));
+
             startActivity(intent);
         });
 
@@ -102,8 +92,8 @@ public class HomeActivity extends AppCompatActivity
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AppTheme);
         dialogBuilder
-                .setTitle(R.string.InternetTitle)
-                .setMessage(R.string.requireInternet)
+                .setTitle(R.string.internet_title)
+                .setMessage(R.string.requires_internet)
                 .setPositiveButton("Ok", (dialogInterface, i) -> {
                     if(!isConnected())
                     {

@@ -30,7 +30,7 @@ public class HistorischeKMFactory
         {
             monumentList = getHistKmList();
         }
-        Route histKmRoute = new Route.Builder().routeList(monumentList).name(context.getResources().getString(R.string.histkm_shortdescription)).description(context.getResources().getString(R.string.histkm_description)).build();
+        Route histKmRoute = new Route.Builder().routeList(monumentList).name(context.getResources().getString(R.string.histkm_shortdescription)).description(context.getResources().getString(R.string.histkm_description)).length(0.3).build();
         System.out.println(histKmRoute.toString());
         return histKmRoute;
     }
@@ -102,9 +102,11 @@ public class HistorischeKMFactory
                             .name(nextLine[3])
                             .description(nextLine[4])
                             .id(Integer.valueOf(nextLine[0]))
+                            .constructionYear(1125)
+                            .creator("Breda")
                             .build();
                     tempList.add(monument);
-                    if(monument.getName() != null)
+                    if(monument.getName() != null && !monument.getName().equals(""))
                     {
                         sightseeingslist.add(monument);
                     }
