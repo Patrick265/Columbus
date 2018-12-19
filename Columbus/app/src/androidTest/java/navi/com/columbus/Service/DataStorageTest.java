@@ -6,7 +6,6 @@ import android.util.Log;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import navi.com.columbus.DataModel.Monument;
 import navi.com.columbus.DataModel.Route;
@@ -28,7 +27,7 @@ public class DataStorageTest
             .longitude(219312)
             .build();
 
-    private List<Monument> monuments = new ArrayList<>();
+    private ArrayList<Monument> monuments = new ArrayList<>();
 
 
     public void initalise() {
@@ -67,7 +66,10 @@ public class DataStorageTest
     @Test
     public void retrieveAllMonument()
     {
-        assertEquals(1, storage.retrieveAllMonument().size());
+        for(Monument m : this.storage.retrieveAllMonument()) {
+            Log.i("M", m.toString());
+        }
+        //assertEquals(1, storage.retrieveAllMonument().size());
     }
 
     @Test
@@ -95,6 +97,9 @@ public class DataStorageTest
     @Test
     public void retrieveAllRoutes()
     {
+        for(Route r : storage.retrieveAllRoutes()) {
+            Log.i("ROUTE", r.toString());
+        }
         assertEquals(1, storage.retrieveAllRoutes().size());
     }
 
@@ -112,7 +117,9 @@ public class DataStorageTest
     public void getRPrimaryKey()
     {
         int i = storage.getRPrimaryKey(route);
-
+        for(Route r : storage.retrieveAllRoutes()) {
+            Log.i("ROUTE", String.valueOf(storage.getRPrimaryKey(r)));
+        }
         assertEquals(1, i);
     }
 
@@ -122,5 +129,34 @@ public class DataStorageTest
         int i = storage.getMPrimaryKey(monument);
 
         assertEquals(1, i);
+    }
+
+    @Test
+    public void getMonumentCount()
+    {
+        Log.i("TAG", String.valueOf(storage.getMonumentCount()));
+        assertEquals(1, storage.getMonumentCount());
+    }
+
+    @Test
+    public void listAllMain()
+    {
+        storage.listAllMain();
+    }
+
+    @Test
+    public void retrieveMonumentsOnRoute()
+    {
+    }
+
+    @Test
+    public void listAllRoute()
+    {
+        this.storage.listAllRoute();
+    }
+
+    @Test
+    public void onConfigure()
+    {
     }
 }

@@ -3,6 +3,7 @@ package navi.com.columbus.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ public class DataStorage extends SQLiteOpenHelper
         db.execSQL(DatabaseQuery.CREATE_TABLE_MONUMENT);
         db.execSQL(DatabaseQuery.CREATE_TABLE_ROUTE);
         db.execSQL(DatabaseQuery.CREATE_TABLE_MAIN);
+        onConfigure(db);
     }
 
     @Override
@@ -43,6 +45,12 @@ public class DataStorage extends SQLiteOpenHelper
         onCreate(db);
     }
 
+    @Override
+    public void onConfigure(SQLiteDatabase db)
+    {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
+    }
 
     /**
      * It will search through the database with the two parameters and will return the monument.
@@ -94,9 +102,11 @@ public class DataStorage extends SQLiteOpenHelper
         Log.d("QUERYALLMONUMENT", query);
 
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        }
 
         if(cursor.getCount() > 0 ) {
-            if(cursor.moveToFirst()) {
                 do {
                     Monument monument = new Monument.Builder()
                                            .name(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_MONUMENTNAME)))
@@ -117,7 +127,6 @@ public class DataStorage extends SQLiteOpenHelper
                     }
                     monuments.add(monument);
                 }while (cursor.moveToNext());
-            }
         }
         cursor.close();
        return monuments;
@@ -141,7 +150,8 @@ public class DataStorage extends SQLiteOpenHelper
         }
 
         SQLiteDatabase db = getWritableDatabase();
-        db.insert(DatabaseQuery.TABLE_HEADER_MONUMENT, null, values);
+        long i = db.insert(DatabaseQuery.TABLE_HEADER_MONUMENT, null, values);
+        Log.i("ALISTANMO", String.valueOf(i));
         Log.i("INSERTEDDB", "INSERTED MONUMENT IN DB");
     }
 
@@ -150,28 +160,37 @@ public class DataStorage extends SQLiteOpenHelper
         values.put(DatabaseQuery.COL_ROUTE_ROUTENAME, route.getName());
         values.put(DatabaseQuery.COL_ROUTE_DESCRIPTION, route.getDescription());
         values.put(DatabaseQuery.COL_ROUTE_LENGTH, route.getLength());
+
         if(route.isFinished()) {
-            values.put(DatabaseQuery.COL_ROUTE_FINSIHED, 1);
+            values.put(DatabaseQuery.COL_ROUTE_FINISHED, 1);
         } else {
-            values.put(DatabaseQuery.COL_ROUTE_FINSIHED, 0);
+            values.put(DatabaseQuery.COL_ROUTE_FINISHED, 0);
         }
-        getWritableDatabase().insert(DatabaseQuery.TABLE_HEADER_ROUTE, null, values);
+
+        long i = getWritableDatabase().insert(DatabaseQuery.TABLE_HEADER_ROUTE, null, values);
+
+        Log.i("ALISTANR", String.valueOf(i));
         values.clear();
         Log.i("INSERTEDDB", "INSERTED ROUTE IN DB");
 
         int index = 0;
-        for (Monument monument : route.getMonumentList())
-        {
-            addMonument(monument);
-            values.put(DatabaseQuery.COL_MAIN_ROUTEID, getRPrimaryKey(route));
-            values.put(DatabaseQuery.COL_MAIN_MONUMENTNAME, getMPrimaryKey(monument));
-            values.put(DatabaseQuery.COL_MAIN_ORDERMONUMENTS, index);
-            index++;
+        getWritableDatabase().beginTransaction();
+        try {
+
+            for (Monument monument : route.getMonumentList())
+            {
+                addMonument(monument);
+                values.put(DatabaseQuery.COL_MAIN_ROUTEID, getRPrimaryKey(route));
+                values.put(DatabaseQuery.COL_MAIN_MONUMENTNAME, getMPrimaryKey(monument));
+                values.put(DatabaseQuery.COL_MAIN_ORDERMONUMENTS, index);
+                index++;
+                getWritableDatabase().insert(DatabaseQuery.TABLE_HEADER_MAIN, null, values);
+                values.clear();
+            }
+            getWritableDatabase().setTransactionSuccessful();
+        } finally {
+            getWritableDatabase().endTransaction();
         }
-
-        values.clear();
-        Log.i("INSERTEDDB", "INSERTED ROUTE IN DB");
-
     }
 
     public List<Route> retrieveAllRoutes() {
@@ -179,28 +198,67 @@ public class DataStorage extends SQLiteOpenHelper
         String query = "SELECT * FROM ROUTE;";
         Log.d("QUERYALLROUTE", query);
 
+        String s = DatabaseUtils.dumpCursorToString(this.getReadableDatabase().rawQuery("SELECT * FROM MONUMENT", null));
+        Log.i("DUMP", s);
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
-
+        if(cursor != null)
+        {
+            cursor.moveToFirst();
+        }
         if(cursor.getCount() > 0 ) {
-            if(cursor.moveToFirst()) {
                 do {
                     Route route = new Route.Builder()
                             .name(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ROUTENAME)))
                             .description(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_DESCRIPTION)))
                             .length(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_LENGTH)))
                             .build();
-                    if(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_FINSIHED)) == 1) {
+                    if(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_FINISHED)) == 1) {
                         route.setFinished(true);
                     } else
                     {
                         route.setFinished(false);
                     }
+                    route.setMonumentList(retrieveMonumentsOnRoute(getRPrimaryKey(route)));
                     routes.add(route);
                 }while (cursor.moveToNext());
+
             }
-        }
         cursor.close();
         return routes;
+    }
+
+    public void listAllMain() {
+        String query = "SELECT * FROM " + DatabaseQuery.TABLE_HEADER_MAIN;
+        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
+        String entry = null;
+        if(cursor != null) {
+            cursor.moveToFirst();
+                do {
+
+
+                    entry = cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MAIN_ROUTEID)) + " \n" +
+                                    cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MAIN_MONUMENTNAME)) + " \n" +
+                                    cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MAIN_ORDERMONUMENTS)) + " \n" +
+                    Log.i("ENTRY", entry);
+                } while(cursor.moveToNext());
+            }
+    }
+
+    public void listAllRoute() {
+        String query = "SELECT * FROM " + DatabaseQuery.TABLE_HEADER_ROUTE;
+        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
+        String entry = null;
+        if(cursor != null) {
+            cursor.moveToFirst();
+            do {
+                entry = cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ID)) + " \n" +
+                        cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ROUTENAME)) + " \n" +
+                        cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_DESCRIPTION)) + " \n" +
+                        cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_DESCRIPTION)) + " \n" +
+                        cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_FINISHED));
+                        Log.i("ENTRY", entry);
+            } while(cursor.moveToNext());
+        }
     }
 
 
@@ -211,6 +269,7 @@ public class DataStorage extends SQLiteOpenHelper
      * @return The route
      */
     public Route retrieveRoute(String routename) {
+
         String query = "SELECT * FROM ROUTE WHERE ROUTE.RouteName = \"" + routename +"\" LIMIT 1;";
         Log.d("QUERYROUTE", query);
 
@@ -220,17 +279,20 @@ public class DataStorage extends SQLiteOpenHelper
         }
 
         if(cursor.getCount() > 0) {
+
             Route route = new Route.Builder()
                     .name(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ROUTENAME)))
                     .description(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_DESCRIPTION)))
                     .length(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_LENGTH)))
                     .build();
-            if(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_FINSIHED)) == 1) {
+            if(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_FINISHED)) == 1) {
                 route.setFinished(true);
             } else
             {
                 route.setFinished(false);
             }
+
+            route.setMonumentList(retrieveMonumentsOnRoute(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MAIN_ROUTEID))));
             cursor.close();
             return route;
         }
@@ -241,29 +303,70 @@ public class DataStorage extends SQLiteOpenHelper
     }
 
 
+
+    public ArrayList<Monument> retrieveMonumentsOnRoute(int RouteID) {
+        ArrayList<Monument> monumentList = new ArrayList<>();
+            String query = "SELECT * FROM MONUMENT JOIN ROUTEMONUMENT ON id = ROUTEMONUMENT.MonumentID WHERE ROUTEMONUMENT.RouteID =" + RouteID + ";";
+        Log.d("QUERYMONUMENT", query);
+        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
+
+        if(cursor != null) {
+            cursor.moveToFirst();
+
+        } else {
+            throw new Error("CURSOR IS NULL");
+        }
+
+        if(cursor.getCount() > 0 ) {
+            do {
+                Monument monument = new Monument.Builder()
+                        .name(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_MONUMENTNAME)))
+                        .description(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_DESCRIPTION)))
+                        .creator(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CREATOR)))
+                        .soundURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_SOUNDFILEURL)))
+                        .imageURL(cursor.getString(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_IMAGEURL)))
+                        .latitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LATITUDE)))
+                        .longitude(cursor.getDouble(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_LONGITUDE)))
+                        .constructionYear(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_CONSTRUCTIONYEAR)))
+                        .build();
+
+
+                if(cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_MONUMENT_ISVISITED)) == 1) {
+                    monument.setVisited(true);
+                } else
+                {
+                    monument.setVisited(false);
+                }
+                monumentList.add(monument);
+            }while (cursor.moveToNext());
+
+            return monumentList;
+        } else {
+            cursor.close();
+            throw new Error("ROUTE COULD NOT BE FOUND BECAUSE EITHER IT DOES NOT EXIST OR INVALID PARAMETERS!");
+        }
+    }
+
     /**
      * Retrieve the primary key id of the route.
      * @param route For it to check on a route.
      * @return The id number of the a specific route, if it cannot find a ID it will throw a error;
      */
     public int getRPrimaryKey(Route route) {
-        String query = "SELECT id FROM ROUTE WHERE RouteName =\"" + route.getName()  +"\"AND Length =" + route.getLength() + ";";
+        String query = "SELECT id FROM ROUTE WHERE RouteName = \"" + route.getName() + "\";";
         Log.d("QueryPrimaryKeyR", query);
 
         Cursor cursor = getReadableDatabase().rawQuery(query, null);
-        if(cursor != null) {
+        if(cursor != null)
+        {
             cursor.moveToFirst();
-
-            if(cursor.getCount() > 0 ) {
-
+            if(cursor.getCount() > 0 ){
 
                 int id = cursor.getInt(cursor.getColumnIndex(DatabaseQuery.COL_ROUTE_ID));
                 cursor.close();
                 return id;
-            }
-            else {
-                cursor.close();
-                throw new Error("ROUTE COULD NOT BE FOUND BECAUSE EITHER IT DOES NOT EXIST OR INVALID PARAMETERS!");
+            } else {
+                throw new Error("COUNT IS NOT BIGGER THEN 0");
             }
         }
 
@@ -302,4 +405,26 @@ public class DataStorage extends SQLiteOpenHelper
 
     }
 
+    public int getMonumentCount()
+    {
+        String query = "SELECT COUNT(*) FROM" + DatabaseQuery.TABLE_HEADER_MONUMENT +";";
+        Log.d("QueryMonumentCount", query);
+
+        Cursor cursor = getReadableDatabase().rawQuery(query, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.getCount() > 0 ) {
+                int numRows = (int) DatabaseUtils.longForQuery(getReadableDatabase(), query, null);
+                cursor.close();
+                return numRows;
+            }
+            else {
+                cursor.close();
+                throw new Error("COULD NOT RETURN THE SIZE OF MONUMENT");
+            }
+        } else {
+            throw new Error("CURSOR IS NULL");
+        }
+
+    }
 }

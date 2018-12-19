@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,11 +32,14 @@ import navi.com.columbus.R;
 import navi.com.columbus.Service.ApiHandler;
 import navi.com.columbus.Service.BlindWallsDataHandler;
 import navi.com.columbus.Service.BlindWallsListener;
+import navi.com.columbus.Service.DataStorage;
 import navi.com.columbus.Service.RecyclerItemClickListener;
 
 public class RouteListActivity extends AppCompatActivity implements BlindWallsListener
 {
     private ArrayList<Route> routes;
+    private ArrayList<Monument> monumentsBlindwall;
+    private DataStorage storage;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -43,36 +47,33 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
     private TextView routesTitle;
     private Dialog dMessage;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_list);
 
+        initalise();
 
 
+    }
+
+
+    private void initalise() {
+        this.storage = new DataStorage(getApplicationContext());
+        this.routes = new ArrayList<>();
+
+
+        //region ANDROID COMPONENTS
         dMessage = new Dialog(this);
-        Button errorMessageOpen = findViewById(R.id.rl_ErrorTest);
-        errorMessageOpen.setOnClickListener(v -> showMessage("Je moeder", "Dit is een kort test tekstje. De kat krabt de krullen van de kanker trap."));
-
 
 
         routesTitle = findViewById(R.id.rl_Title);
         routesTitle.setText(R.string.routeList_title);
 
-        routes = new ArrayList<>();
-        HistorischeKMFactory historischeKMFactory = new HistorischeKMFactory();
-        ArrayList<Monument> blindWallMonuments = new ArrayList<>();
-
-
-        routes.add(historischeKMFactory.getHistorischeKilometer(this));
-        BlindWallsListener listener = this;
-        BlindWallsDataHandler handler = new BlindWallsDataHandler(this, listener);
-        handler.getWalls();
-
         mRecyclerView = findViewById(R.id.rl_RecyclerView);
-        //mRecyclerView.setHasFixedSize(true);
-
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
@@ -85,13 +86,44 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
         mRecyclerView.setAdapter(mAdapter);
 
         ImageButton helpButton = findViewById(R.id.rl_HelpButton);
-
         helpButton.setOnClickListener(v ->
         {
             Intent intent = new Intent(v.getContext(), HelpActivity.class);
             startActivity(intent);
         });
+
+        Button errorMessageOpen = findViewById(R.id.rl_ErrorTest);
+        errorMessageOpen.setOnClickListener(v -> showMessage("Je moeder", "Dit is een kort test tekstje. De kat krabt de krullen van de kanker trap."));
+        //endregion
+
+
+        //region DATA LOGIC
+
+
+        HistorischeKMFactory historischeKMFactory = new HistorischeKMFactory();
+        this.monumentsBlindwall = new ArrayList<>();
+
+        BlindWallsListener listener = this;
+        BlindWallsDataHandler handler = new BlindWallsDataHandler(this, listener);
+
+        storage.retrieveAllRoutes().size();
+        if(storage.retrieveAllRoutes().size() == 0) {
+            handler.getWalls();
+            routes.add(historischeKMFactory.getHistorischeKilometer(this));
+            Log.i("DB", "ADDED FROM VOLLEY");
+        } else {
+            Log.i("DB", "ADDED FROM DATABASE");
+
+            this.routes.addAll(this.storage.retrieveAllRoutes());
+            this.mAdapter.notifyDataSetChanged();
+        }
+
+        //endregion
+
+
     }
+
+
 
     private void showMessage(String title, String message)
     {
@@ -108,7 +140,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
             titleView.setText(title);
             messageView.setText(message);
 
-            okButton.setOnClickListener(v1 -> dMessage.dismiss());
+            //okButton.setOnClickListener(v1 -> dMessage.dismisans());
 
         } catch(Exception e){
             Log.d("ERROR", e.toString());
@@ -135,6 +167,11 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
                         .routeList(monumentsBlindwall)
                         .build()
         );
+
+
+        for(Route route : this.routes) {
+            this.storage.addRoute(route);
+        }
         mAdapter.notifyDataSetChanged();
     }
 

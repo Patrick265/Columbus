@@ -23,14 +23,13 @@ public class DatabaseQuery
     // COLUMNS IN ROUTE
     public static final String COL_ROUTE_ID = "id";
     public static final String COL_ROUTE_ROUTENAME = "RouteName";
-    public static final String COL_ROUTE_ROUTEMONUMENTID = "RouteMonumentID";
     public static final String COL_ROUTE_DESCRIPTION = "Description";
     public static final String COL_ROUTE_LENGTH = "Length";
-    public static final String COL_ROUTE_FINSIHED = "Finished";
+    public static final String COL_ROUTE_FINISHED = "Finished";
 
     // MAIN TABEL COLUMNS
     public static final String COL_MAIN_ROUTEID = "RouteID";
-    public static final String COL_MAIN_MONUMENTNAME = "MonumentName";
+    public static final String COL_MAIN_MONUMENTNAME = "MonumentID";
     public static final String COL_MAIN_ORDERMONUMENTS = "OrderMonuments";
 
 
@@ -53,10 +52,9 @@ public class DatabaseQuery
     public static final String CREATE_TABLE_ROUTE = "CREATE TABLE IF NOT EXISTS ROUTE (\n" +
             "\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
             "\tRouteName VARCHAR(50),\n" +
-            "    RouteMonumentID INTEGER,\n" +
             "    Description VARCHAR(50),\n" +
             "    Length DOUBLE,\n" +
-            "    Finished BOOLEAN\n" +
+            "    Finished INTEGER\n" +
             ");\n";
 
     public static final String CREATE_TABLE_MAIN = "CREATE TABLE IF NOT EXISTS ROUTEMONUMENT (\n" +
