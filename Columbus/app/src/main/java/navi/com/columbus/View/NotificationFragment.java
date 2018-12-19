@@ -36,8 +36,6 @@ public class NotificationFragment extends DialogFragment
         okButton = view.findViewById(R.id.fn_OkButton);
         Bundle args = getArguments();
         Monument monument = (Monument) args.getSerializable("monument");
-        constructionYear.setText(monument.getConstructionYear());
-
         okButton.setOnClickListener(view1 -> getDialog().dismiss());
 
         String imageURL = monument.getImageURL();
@@ -45,7 +43,7 @@ public class NotificationFragment extends DialogFragment
 
         monumentName.setText(monument.getName());
         makers.setText(monument.getCreator());
-        //constructionYear.setText(monument.getConstructionYear());
+        constructionYear.setText(monument.getConstructionYear()+"");
         description.setText(monument.getDescription());
 
         return view;
