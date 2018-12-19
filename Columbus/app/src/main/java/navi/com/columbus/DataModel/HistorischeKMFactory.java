@@ -30,7 +30,7 @@ public class HistorischeKMFactory
         {
             monumentList = getHistKmList();
         }
-        Route histKmRoute = new Route.Builder().routeList(monumentList).name(context.getResources().getString(R.string.histkm_shortdescription)).description(context.getResources().getString(R.string.histkm_description)).length(0.3).build();
+        Route histKmRoute = new Route.Builder().routeList(monumentList).name(context.getResources().getString(R.string.histkm_shortdescription)).description(context.getResources().getString(R.string.histkm_description)).length(2).build();
         System.out.println(histKmRoute.toString());
         return histKmRoute;
     }

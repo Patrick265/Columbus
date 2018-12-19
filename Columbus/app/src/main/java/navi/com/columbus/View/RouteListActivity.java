@@ -143,7 +143,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
         routes.add(
                 new Route.Builder().description(getResources().getString(R.string.bw_description))
                         .name(getResources().getString(R.string.bw_shortdescription))
-                        .length(1.3)
+                        .length(13)
                         .routeList(monumentsBlindwall)
                         .build()
         );
