@@ -88,6 +88,9 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
         helpButton.setOnClickListener(v ->
         {
             Intent intent = new Intent(v.getContext(), HelpActivity.class);
+
+            intent.putExtra("HELP_TEXT", getResources().getString(R.string.route_list_info));
+
             startActivity(intent);
         });
 
@@ -140,6 +143,7 @@ public class RouteListActivity extends AppCompatActivity implements BlindWallsLi
         routes.add(
                 new Route.Builder().description(getResources().getString(R.string.bw_description))
                         .name(getResources().getString(R.string.bw_shortdescription))
+                        .length(1.3)
                         .routeList(monumentsBlindwall)
                         .build()
         );

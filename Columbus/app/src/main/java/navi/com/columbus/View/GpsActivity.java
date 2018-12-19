@@ -11,11 +11,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +71,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private List<LatLng> legs;
     private PolylineOptions lineOptions2;
     private TextView distanceLeft;
+    private ConstraintLayout bottomBar;
     private int totalDistance;
     private Polyline mPolyLine;
     private Polyline mPolyLine2;
@@ -78,12 +84,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-        this.distanceLeft = findViewById(R.id.txt_distance);
-        this.lastLocation = null;
-        this.gpsActivity = this;
-        this.monuments = new ArrayList<>();
-        this.storage = new DataStorage(getApplicationContext());
-        this.dMessage = new Dialog(this);
+        storage = new DataStorage(getApplicationContext());
+        dMessage = new Dialog(this);
+        distanceLeft = findViewById(R.id.gps_Distance);
+        bottomBar = findViewById(R.id.gps_BottomBar);
+        bottomBar.setVisibility(View.INVISIBLE);
+        lastLocation = null;
+        gpsActivity = this;
+        monuments = new ArrayList<>();
 
         LocationCallbackHandler loc = new LocationCallbackHandler();
         loc.addListener(this);
@@ -107,6 +115,16 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
+
+        ImageButton helpButton = findViewById(R.id.gps_HelpButton);
+        helpButton.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(v.getContext(), HelpActivity.class);
+
+            intent.putExtra("HELP_TEXT", getResources().getString(R.string.gps_info));
+
+            startActivity(intent);
+        });
 
 
         mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gps_Map));
@@ -237,11 +255,26 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             lineOptions.addAll(legs);
             lineOptions.width(15);
             lineOptions.color(getResources().getColor(R.color.colorPrimary));
-            if(mMap != null) {
+            if(mMap != null)
+            {
                 mMap.addPolyline(lineOptions2);
                 mMap.addPolyline(lineOptions);
                 totalDistance = (int)SphericalUtil.computeLength(lineOptions2.getPoints());
-                distanceLeft.setText(totalDistance + "/" + totalDistance + " meter");
+                distanceLeft.setText(totalDistance + "/" + totalDistance + " " + getResources().getString(R.string.meters));
+
+                TextView distanceLeftTitle = findViewById(R.id.gps_DistanceLeftText);
+                distanceLeftTitle.setText(getResources().getString(R.string.distance_left_title));
+
+                ImageButton cancelRoute = findViewById(R.id.gps_CancelRouteButton);
+                cancelRoute.setOnClickListener(v -> this.finish());
+
+                bottomBar.setVisibility(View.VISIBLE);
+
+                ConstraintLayout c = findViewById(R.id.gps_ConstraintLayout);
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(c);
+                constraintSet.connect(R.id.gps_Map, ConstraintSet.BOTTOM, R.id.gps_BottomBar, ConstraintSet.TOP,0);
+                constraintSet.applyTo(c);
             }
         }
         catch (JSONException e)

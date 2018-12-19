@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="help_title">Help</string>
-    <string name="help_info">Deze applicatie is gemaakt om touristen te helpen breda alleen te bezoeken.
-        Op het route selecteren scherm kunt u een route uitkiezen, welke dan automatisch op een kaart wordt getoont.</string>
     <string name="routeList_title">Route selectie</string>
     <string name="home_title">Start</string>
     <string name="home_routeButton">Route selectie</string>
     <string name="home_possibleBy">Mede mogelijk gemaakt door</string>
-    <string name="histkm_description">Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad.</string>
+
     <string name="histkm_shortdescription">De historische kilometer</string>
+    <string name="histkm_description">Een wandelroute langs de historie van Breda. Een korte wandeling door het centrum die u kennis laat maken met de diepgaande cultuur en geschiedenis van deze mooie stad.</string>
     <string name="bw_shortdescription">De route van Blind Walls</string>
-    <string name="bw_description">De route van Blind Walls</string>
+    <string name="bw_description">Een wandelroute langs muurschilderijen van Breda.
+        De Blind Walls Gallery is een museum op straat. Internationale kunstenaars maken doorlopend muurschilderingen geïnspireerd op verhalen uit de stad. Elk jaar groeit de collectie.</string>
+
     <string name="permission_title">Locatietoestemming nodig</string>
     <string name="permission_message">Deze app heeft locatietoestemming nodig, geef aub toegang tot de locatie functionaliteit.</string>
     <string name="permission_denied">Geen toestemming</string>
-    <string name="LoadingValues">Bezig met het laden van waarden</string>
-    <string name="requireInternet">Deze applicatie heeft internet nodig om te kunnen functioneren.</string>
-    <string name="InternetTitle">Zet alstublieft het internet aan.</string>
+    <string name="loading_values">Bezig met het laden van waarden</string>
+    <string name="meters">meter</string>
+    <string name="requires_internet">Deze applicatie heeft internet nodig om te kunnen functioneren.</string>
+    <string name="internet_title">Zet alstublieft het internet aan.</string>
+    <string name="distance_left_title">Resterende afstand:</string>
     <string name="not_TapMessString">Klik buiten de notificatie om te sluiten</string>
     <string name="not_messString_start">Je bent in de buurt van:\n\n\nKlik op de marker om de informatie te zien!</string>
     <string name="not_titleString">Je bent er bijna...</string>
+
+    <string name="home_info">Welkom bij de Columbus app!\n\nDeze applicatie is gemaakt om touristen te helpen Breda alleen te bezoeken.
+        Op het scherm "Route selectie" kunt u een route uitkiezen, welke dan automatisch op een kaart wordt getoont.</string>
+    <string name="route_list_info">Dit is het route selectie scherm. Op dit scherm ziet u een lijst met alle routes die de app heeft.
+        U kunt een route selecteren door erop te klikken, waarna u automatisch naar de map wordt doorgestuurd.</string>
+    <string name="gps_info">Dit is het GPS scherm. In dit scherm kunt u de geselecteerde route zien. Elke route bevat een aantal punten waar u via de kortste route langs kunt lopen door de route te volgen.
+        Als u zich dichtbij een route bevindt, dan krijgt u een notificatie. Wanneer u op een punt in de route klikt, dan krijgt u de bijbehorende informatie over dit punt.</string>
 </resources>

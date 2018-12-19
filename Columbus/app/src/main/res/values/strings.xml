@@ -1,24 +1,35 @@
 <resources>
     <string name="app_name" translatable="false">Columbus</string>
+
     <string name="help_title">Help</string>
     <string name="routeList_title">Route selection</string>
-    <string name="help_info">This application is made to help tourists visit Breda on their own.
-        There are multiple routes to choose from on the route selection screen, which will, after selected, automatically show on the map.</string>
     <string name="home_title">Home</string>
+    <string name="gps_title" translatable="false">GPS</string>
     <string name="home_routeButton">Route selection</string>
-    <string name="GPS_title" translatable="false">GPS</string>
     <string name="home_possibleBy">Made possible by</string>
+
     <string name="histkm_description">A walking route along the history of Breda. A short walk through the center that will introduce you to the profound culture and history of this beautiful city.</string>
     <string name="histkm_shortdescription">The historic kilometer</string>
     <string name="bw_shortdescription">The route of the Blind Walls</string>
-    <string name="bw_description">The route of the Blind Walls</string>
+    <string name="bw_description">A walking route along wall paintings of Breda.
+         The Blind Walls Gallery is a museum on the street. International artists continuously create murals inspired by stories from the city. The collection grows every year.</string>
+
     <string name="permission_title">Location permission needed</string>
     <string name="permission_message">This app needs the Location permission, please accept to use location functionality.</string>
     <string name="permission_denied">Permission denied</string>
-    <string name="LoadingValues">Loading values</string>
-    <string name="requireInternet">This application requires an internet connection to function.</string>
-    <string name="InternetTitle">Please turn on the internet.</string>
+    <string name="loading_values">Loading values</string>
+    <string name="meters">meters</string>
+    <string name="requires_internet">This application requires an internet connection to function.</string>
+    <string name="internet_title">Please turn on the internet.</string>
+    <string name="distance_left_title">Distance left:</string>
     <string name="not_TapMessString">Tap anywhere outside the notification to continue</string>
     <string name="not_messString_start">You are near:\n\n\nTap the marker to see the information!</string>
     <string name="not_titleString">Almost there...</string>
+
+    <string name="home_info">Welcome to the Columbus app!\n\nThis application is made to help tourists visit Breda on their own.
+        There are multiple routes to choose from on the "Route selection" screen, which, after being selected will automatically show on the map.</string>
+    <string name="route_list_info">This is the route selection screen. On this screen you will see a list of all the routes that the app has.
+        You can select a route by clicking on it and you will be automatically redirected to the folder.</string>
+    <string name="gps_info">This is the GPS screen. In this screen you can see the selected route. Each route contains a number of points where you can walk along the shortest route by following the route.
+         If you are close to a route, you will receive a notification. When you click on a point in the route, you get the corresponding information about this point.</string>
 </resources>

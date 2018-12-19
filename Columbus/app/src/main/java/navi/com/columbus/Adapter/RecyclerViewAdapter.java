@@ -39,7 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         holder.getRouteName().setText(route.getName());
         holder.getDescription().setText(route.getDescription());
-        holder.getRouteLength().setText(route.getLength() + " km");
+        holder.getRouteLength().setText("~" + route.getLength() + " km");
         holder.bindActivity(route, listener);
     }
 
