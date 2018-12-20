@@ -44,7 +44,6 @@ public class NotificationService extends Service {
                 .setContentTitle("Columbus")
                 .setContentText("GPS service")
                 .setSmallIcon(R.drawable.not_icon)
-                .setContentIntent(pendingIntent)
                 .build();
 
         startForeground(1, notification);
