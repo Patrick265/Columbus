@@ -13,13 +13,15 @@ import navi.com.columbus.DataModel.Route;
 import navi.com.columbus.R;
 import navi.com.columbus.View.GpsActivity;
 
-public class ViewHolder extends RecyclerView.ViewHolder {
-    ImageView background;
-    TextView routeName;
-    TextView description;
-    TextView routeLength;
+public class ViewHolder extends RecyclerView.ViewHolder
+{
+    private ImageView background;
+    private TextView routeName;
+    private TextView description;
+    private TextView routeLength;
 
-    public ViewHolder(@NonNull View v) {
+    public ViewHolder(@NonNull View v)
+    {
         super(v);
 
         this.background = v.findViewById(R.id.rli_Background);
@@ -28,12 +30,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         this.routeLength = v.findViewById(R.id.rli_RouteLength);
     }
 
-
-    public void bindActivity(final Route route, final OnRouteClickListener listener) {
-        super.itemView.setOnClickListener(v -> {
-            listener.onItemClick(route);
-        });
+    public void bindActivity(final Route route, final OnRouteClickListener listener)
+    {
+        super.itemView.setOnClickListener(v -> listener.onItemClick(route));
     }
+
     public ImageView getBackground()
     {
         return background;

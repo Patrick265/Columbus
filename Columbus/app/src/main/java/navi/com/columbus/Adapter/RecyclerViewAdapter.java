@@ -14,28 +14,31 @@ import navi.com.columbus.DataModel.Route;
 import navi.com.columbus.R;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
-
+public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder>
+{
     private ArrayList<Route> mDataset;
     private OnRouteClickListener listener;
 
-    public RecyclerViewAdapter(ArrayList<Route> mDataset, OnRouteClickListener listener) {
+    public RecyclerViewAdapter(ArrayList<Route> mDataset, OnRouteClickListener listener)
+    {
         this.mDataset = mDataset;
         this.listener = listener;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position)
+    {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.route_list_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
+    {
         Route route = mDataset.get(position);
         if (position % 2 != 0)
-            holder.background.setBackgroundColor(Color.parseColor("#1693ff"));
+            holder.getBackground().setBackgroundColor(Color.parseColor("#1693ff"));
 
         holder.getRouteName().setText(route.getName());
         holder.getDescription().setText(route.getDescription());

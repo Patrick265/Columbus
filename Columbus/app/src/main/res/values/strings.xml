@@ -11,8 +11,7 @@
     <string name="histkm_description">A walking route along the history of Breda. A short walk through the center that will introduce you to the profound culture and history of this beautiful city.</string>
     <string name="histkm_shortdescription">The historic kilometer</string>
     <string name="bw_shortdescription">The route of the Blind Walls</string>
-    <string name="bw_description">A walking route along wall paintings of Breda.
-         The Blind Walls Gallery is a museum on the street. International artists continuously create murals inspired by stories from the city. The collection grows every year.</string>
+    <string name="bw_description">A walking route along wall paintings of Breda. The Blind Walls Gallery is a museum on the street. The collection grows every year.</string>
 
     <string name="permission_title">Location permission needed</string>
     <string name="permission_message">This app needs the Location permission, please accept to use location functionality.</string>
